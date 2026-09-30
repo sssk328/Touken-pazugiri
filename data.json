@@ -1,0 +1,87 @@
+{
+ "sortie": [
+  {
+   "ch": "第1章",
+   "name": "1-2",
+   "lv": "",
+   "type": "",
+   "items": ""
+  },
+  {
+   "ch": "第1章",
+   "name": "1-3",
+   "lv": "",
+   "type": "",
+   "items": ""
+  }
+ ],
+ "gifts": {
+  "drops": [
+   {
+    "name": "水",
+    "where": "",
+    "related": "",
+    "men": "",
+    "yukari": ""
+   }
+  ],
+  "crafts": [
+   {
+    "name": "臼と杵",
+    "mats": "",
+    "men": ""
+   }
+  ]
+ },
+ "yukari": [
+  {
+   "name": "天下五剣",
+   "men": "",
+   "mats": ""
+  }
+ ],
+ "men": [
+  {
+   "name": "三日月宗近",
+   "ver": "レア",
+   "look": "戦装束",
+   "sword": "太刀",
+   "color": "",
+   "need": "",
+   "skill": "",
+   "skillType": ""
+  },
+  {
+   "name": "三日月宗近",
+   "ver": "通常",
+   "look": "イベント",
+   "sword": "太刀",
+   "color": "",
+   "need": "",
+   "skill": "",
+   "skillType": ""
+  }
+ ],
+ "limit": [
+  {
+   "name": "三日月宗近",
+   "rare": "",
+   "lv30": "",
+   "lv35": "",
+   "where": ""
+  }
+ ],
+ "ema": [
+  {
+   "name": "星明かりの花",
+   "rare": "",
+   "effect": ""
+  }
+ ],
+ "chapters": [
+  "第1章",
+  "第2章",
+  "第3章"
+ ],
+ "adminHash": ""
+}
