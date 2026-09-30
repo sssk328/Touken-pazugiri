@@ -108,13 +108,17 @@ function modal(html,fn){let d=$("#dlg");if(!d){d=document.createElement("dialog"
 const sha=async s=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode("pzg:"+s)))].map(b=>b.toString(16).padStart(2,"0")).join("");
 function buildHtml(){const c=document.documentElement.cloneNode(true);c.querySelector("#main").innerHTML="";c.querySelector("#nav").innerHTML="";c.querySelectorAll("dialog,.toast").forEach(e=>e.remove());c.querySelector("#store").textContent=JSON.stringify(DATA).replace(/</g,"\\u003c");return "<!DOCTYPE html>\n"+c.outerHTML}
 const GH=()=>{try{return JSON.parse(localStorage.getItem("gh"))}catch(e){return null}};
-async function ghSave(c){const api=`https://api.github.com/repos/${c.repo}/contents/${c.path}`,h={Authorization:"Bearer "+c.token,Accept:"application/vnd.github+json"};
-const g=await fetch(api+"?ref="+encodeURIComponent(c.branch),{headers:h});let sha;
-if(g.ok)sha=(await g.json()).sha;else if(g.status!==404)throw new Error(g.status===401||g.status===403?"トークンが無効か権限不足です":g.status===404?"リポジトリが見つかりません":"エラー "+g.status);
+const ghApi=c=>`https://api.github.com/repos/${c.repo}/contents/${c.path}`;
+const ghHead=(c,raw)=>({Authorization:"Bearer "+c.token,Accept:raw?"application/vnd.github.raw+json":"application/vnd.github+json"});
+const ghGet=(c,raw)=>fetch(`${ghApi(c)}?ref=${encodeURIComponent(c.branch)}&_=${Date.now()}`,{headers:ghHead(c,raw),cache:"no-store"});
+async function ghSave(c,retry){const g=await ghGet(c);let sha;
+if(g.ok)sha=(await g.json()).sha;else if(g.status!==404)throw new Error(g.status===401||g.status===403?"トークンが無効か権限不足です":"エラー "+g.status);
 let bin="";new TextEncoder().encode(JSON.stringify(DATA,null,1)).forEach(x=>bin+=String.fromCharCode(x));
 const body={message:"データ更新",content:btoa(bin),branch:c.branch};if(sha)body.sha=sha;
-const p=await fetch(api,{method:"PUT",headers:{...h,"Content-Type":"application/json"},body:JSON.stringify(body)});
-if(!p.ok)throw new Error(p.status===401||p.status===403?"トークンの権限（Contents: Read and write）を確認してください":p.status===409?"競合しました。再読み込みしてやり直してください":"エラー "+p.status)}
+const p=await fetch(ghApi(c),{method:"PUT",headers:{...ghHead(c),"Content-Type":"application/json"},body:JSON.stringify(body)});
+if(p.status===409&&!retry)return ghSave(c,true);
+if(!p.ok)throw new Error(p.status===401||p.status===403?"トークンの権限（Contents: Read and write）を確認してください":p.status===409?"競合が解消できませんでした。再読み込みしてやり直してください":"エラー "+p.status)}
+async function ghLoad(){const c=GH();if(!c||!ADMIN)return;try{const r=await ghGet(c,true);if(r.ok){const d=await r.json();if(d&&d.sortie){DATA=d;route()}}}catch(e){}}
 async function commit(){route();const c=GH();
 if(c){try{await ghSave(c);toast("保存しました（サイトへの反映に1〜2分かかることがあります）")}catch(e){toast("保存に失敗："+e.message)}return}
 const a=window.claude?await claude.use("artifact"):null;
@@ -140,13 +144,13 @@ function login(){if(ADMIN)return;const first=!DATA.adminHash;
 modal(`<h3>${first?"管理者番号を設定":"管理者番号"}</h3><input id="pw" type="password" inputmode="numeric" autocomplete="off" aria-label="管理者番号"><p class="msg" id="msg">${first?"初回のみ：ここで入力した番号が管理者番号になります。":""}</p><div class="act"><button data-act="cancel">キャンセル</button><button class="primary" data-act="ok">OK</button></div>`,async(a,d)=>{
 if(a==="cancel")return d.close();const v=$("#pw").value.trim();if(!v)return;const h=await sha(v);
 if(first){DATA.adminHash=h}else if(h!==DATA.adminHash){$("#msg").textContent="番号が違います。";return}
-ADMIN=true;try{sessionStorage.setItem("adm","1")}catch(e){}d.close();first?commit():route()})}
+ADMIN=true;try{sessionStorage.setItem("adm","1")}catch(e){}d.close();first?commit():(route(),ghLoad())})}
 document.addEventListener("click",e=>{const t=e.target,b=t.closest&&t.closest("[data-add],[data-edit],[data-chap],[data-out],[data-gh],.chip,#sakura");if(!b)return;
 if(b.id==="sakura")login();else if(b.classList.contains("chip")){chipFn&&chipFn(b)}
 else if(b.dataset.add)form(b.dataset.add,-1);else if(b.dataset.edit){const[c,i]=b.dataset.edit.split(":");form(c,+i)}
 else if(b.dataset.chap)chapForm();else if(b.dataset.gh)ghForm(false);else if(b.dataset.out){ADMIN=false;try{sessionStorage.removeItem("adm")}catch(e){}route()}});
 window.addEventListener("hashchange",()=>{route();window.scrollTo(0,0)});route();
-fetch("data.json?_="+Date.now()).then(x=>x.ok?x.json():null).then(d=>{if(d&&d.sortie){DATA=d;route()}}).catch(()=>{});
+fetch("data.json?_="+Date.now()).then(x=>x.ok?x.json():null).then(d=>{if(d&&d.sortie){DATA=d;route()}}).catch(()=>{}).then(ghLoad);
 </script>
 </body>
 </html>
