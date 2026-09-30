@@ -99,7 +99,7 @@ const GROW=[
 const $=s=>document.querySelector(s);
 const tags=s=>s.split(/,\s*/).map(t=>`<span class="tag">${t}</span>`).join("");
 const table=(head,rows)=>`<div class="wrap"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table></div>`;
-const dummy='<div class="note">現在の表示内容は構成確認用のダミーデータです。実際のゲーム情報に差し替えてください。</div>';
+const dummy='';
 const title=(t,l)=>`<h1>${t}</h1><p class="lead">${l}</p>`;
 
 /* ===== ページ描画 ===== */
