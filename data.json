@@ -766,6 +766,20 @@
    "yukari": "",
    "no": "013",
    "skillType": []
+  },
+  {
+   "name": "厚藤四郎",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "短刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "014",
+   "skillType": []
   }
  ],
  "limit": [
