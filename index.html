@@ -77,7 +77,7 @@ const BCLS={"レア":"rare","通常":"normal","戦装束":"battle","イベント
 const FW=s=>String(s).replace(/[0-9]/g,d=>String.fromCharCode(d.charCodeAt(0)+65248));
 const OPT={ver:VERS,look:LOOKS,sword:SWORDS,color:COLORS,skillType:SKILLS,get chapters(){return DATA.chapters},get menno(){return DATA.men.filter(m=>m.no).map(m=>[m.no,`${m.no} ${m.name}${m.ver?"（"+m.ver+(m.look?"・"+m.look:"")+"）":""}`])}};
 const SCH={
-sortie:{t:"ステージ",a:()=>DATA.sortie,f:[["ch","章","chapters"],["name","ステージ名"],["lv","推奨Lv"],["type","有利刀種"],["items","アイテム"]]},
+sortie:{t:"ステージ",a:()=>DATA.sortie,f:[["ch","章","chapters"],["name","ステージ名"],["lv","推奨Lv"],["type","有利刀種"],["items",ドロップ"]]},
 drops:{t:"ドロップ素材",a:()=>DATA.gifts.drops,f:[["name","名前"],["where","入手場所"],["related","関連贈物"],["men","必要男士"],["yukari","ゆかり"]]},
 crafts:{t:"合成アイテム",a:()=>DATA.gifts.crafts,f:[["name","名前"],["mats","必要素材"],["men","必要男士"]]},
 yukari:{t:"ゆかり",a:()=>DATA.yukari,f:[["name","名前"],["men","対象男士"],["mats","関連素材"]]},
