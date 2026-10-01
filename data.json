@@ -1004,6 +1004,20 @@
    "yukari": "",
    "no": "030",
    "skillType": []
+  },
+  {
+   "name": "歌仙兼定",
+   "ver": "レア",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "031",
+   "skillType": []
   }
  ],
  "limit": [
