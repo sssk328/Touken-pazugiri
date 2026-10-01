@@ -1144,6 +1144,20 @@
    "yukari": "",
    "no": "040",
    "skillType": []
+  },
+  {
+   "name": "同田貫正国",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "041",
+   "skillType": []
   }
  ],
  "limit": [
