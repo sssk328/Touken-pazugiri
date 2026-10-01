@@ -562,11 +562,11 @@
    "look": "戦装束",
    "sword": "太刀",
    "color": "赤",
-   "need": "",
-   "skill": "",
-   "skillType": "",
+   "need": "22",
+   "skill": "すべてのト餓鬼を消去/n敵に〈特小++〉ダメージを与える",
+   "skillType": "消去",
    "no": "001",
-   "yukari": ""
+   "yukari": "夜・天下五剣"
   },
   {
    "name": "三日月宗近",
