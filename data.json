@@ -1186,6 +1186,20 @@
    "yukari": "",
    "no": "043",
    "skillType": []
+  },
+  {
+   "name": "太郎太刀",
+   "ver": "レア",
+   "look": "戦装束",
+   "sword": "大太刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "044",
+   "skillType": []
   }
  ],
  "limit": [
