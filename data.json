@@ -870,14 +870,18 @@
    "ver": "通常",
    "look": "戦装束",
    "sword": "短刀",
-   "color": "",
-   "need": "",
-   "hp": "",
-   "atk": "",
-   "skill": "",
+   "color": "黄",
+   "need": "16",
+   "hp": "542",
+   "atk": "55",
+   "skill": "〈縦列・特小〉",
    "yukari": "",
    "no": "020",
-   "skillType": []
+   "skillType": [
+    "消去",
+    "攻撃",
+    "補助"
+   ]
   },
   {
    "name": "鶯丸",
