@@ -864,6 +864,20 @@
    "yukari": "",
    "no": "020",
    "skillType": []
+  },
+  {
+   "name": "鶯丸",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "太刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "021",
+   "skillType": []
   }
  ],
  "limit": [
