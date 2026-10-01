@@ -1102,6 +1102,20 @@
    "yukari": "",
    "no": "037",
    "skillType": []
+  },
+  {
+   "name": "蜂須賀虎徹",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "038",
+   "skillType": []
   }
  ],
  "limit": [
