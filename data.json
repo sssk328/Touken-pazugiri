@@ -808,6 +808,20 @@
    "yukari": "",
    "no": "016",
    "skillType": []
+  },
+  {
+   "name": "五虎退",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "短刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "017",
+   "skillType": []
   }
  ],
  "limit": [
