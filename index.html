@@ -90,7 +90,7 @@ const FW=s=>String(s).replace(/[0-9]/g,d=>String.fromCharCode(d.charCodeAt(0)+65
 const OPT={ver:VERS,look:LOOKS,sword:SWORDS,color:COLORS,skillType:SKILLS,rarity:RARES,get chapters(){return DATA.chapters},get menno(){return DATA.men.filter(m=>m.no).map(m=>[m.no,`${m.no} ${m.name}${m.ver?"（"+m.ver+(m.look?"・"+m.look:"")+"）":""}`])}};
 const SCH={
 sortie:{t:"ステージ",a:()=>DATA.sortie,f:[["ch","章","chapters"],["name","ステージ名"],["lv","推奨Lv"],["type","有利刀種"],["items","アイテム"]]},
-drops:{t:"ドロップ素材",a:()=>DATA.gifts.drops,f:[["name","名前"],["where","入手場所"],["related","関連贈物"],["men","必要男士"]]},
+drops:{t:"ドロップ素材",a:()=>DATA.gifts.drops,f:[["name","名前"],["where","入手場所"],["related","関連贈物"]]},
 crafts:{t:"合成アイテム",a:()=>DATA.gifts.crafts,f:[["name","名前"],["mats","必要素材"],["men","必要男士"]]},
 yukari:{t:"ゆかり",a:()=>DATA.yukari,f:[["name","名前"],["men","対象男士"],["mats","関連素材"]]},
 men:{t:"刀剣男士",a:()=>DATA.men,f:[["name","名前"],["ver","レア度","ver"],["look","姿","look"],["sword","刀種","sword"],["color","奥義色","color"],["need","発動必要数"],["skill","能力"],["skillType","能力種別","skillType"],["no","通し番号（非公開・管理者用）"]]},
@@ -142,7 +142,7 @@ const on=!set.has(id),all=x=>{on?set.add(x.id):set.delete(x.id);x.k.forEach(all)
 const CHFOLD=new Set(LS.g("chfold")||[]);
 const views={
 sortie(){return h1("出陣先")+addb("sortie")+(ADMIN?'<button class="add" data-chap="1">＋ 章を追加</button>':"")+DATA.chapters.map(ch=>{const l=DATA.sortie.filter(s=>s.ch===ch);const f=CHFOLD.has(ch);return `<h2><button type="button" class="chh" data-ch="${esc(ch)}" aria-expanded="${!f}">${esc(FW(ch))}<span class="chev" aria-hidden="true"></span></button></h2>`+(f?"":l.length?l.map(s=>card(s.name,"",[["推奨Lv",s.lv],["有利刀種",s.type],["アイテム",s.items]],"sortie",s)).join(""):'<p class="empty">まだ登録がありません。</p>')}).join("")},
-gifts(root){const c=GMODE,fn=c==="drops"?o=>card(o.name,"",[["入手場所",o.where],["関連贈物",o.related],["必要男士",o.men]],"drops",o):o=>card(o.name,"",[["必要素材",o.mats],["必要男士",o.men]],"crafts",o);
+gifts(root){const c=GMODE,fn=c==="drops"?o=>card(o.name,"",[["入手場所",o.where],["関連贈物",o.related]],"drops",o):o=>card(o.name,"",[["必要素材",o.mats],["必要男士",o.men]],"crafts",o);
 root.innerHTML=`${h1("贈物")}<div class="modes"><button type="button" class="mode" data-gmode="drops" aria-pressed="${c==="drops"}">ドロップ素材</button><button type="button" class="mode" data-gmode="crafts" aria-pressed="${c==="crafts"}">合成アイテム</button></div>${addb(c)}${sbox("q",SCH[c].t+"を検索")}<div id="l"></div>`;
 listSearch("#q","#l",c,fn,"該当する贈物がありません。")},
 yukari(root){searchPage(root,"ゆかり","yukari",o=>card(o.name,"",[["対象男士",o.men],["関連素材",o.mats]],"yukari",o),"検索","該当するゆかりがありません。")},
