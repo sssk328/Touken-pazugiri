@@ -976,6 +976,20 @@
    "yukari": "",
    "no": "028",
    "skillType": []
+  },
+  {
+   "name": "加州清光",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "029",
+   "skillType": []
   }
  ],
  "limit": [
