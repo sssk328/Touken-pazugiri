@@ -822,14 +822,16 @@
    "ver": "通常",
    "look": "戦装束",
    "sword": "短刀",
-   "color": "",
-   "need": "",
-   "hp": "",
-   "atk": "",
-   "skill": "",
-   "yukari": "",
+   "color": "赤",
+   "need": "13",
+   "hp": "477",
+   "atk": "56",
+   "skill": "ボムを〈1個〉生成する",
+   "yukari": "兄弟",
    "no": "017",
-   "skillType": []
+   "skillType": [
+    "ボム"
+   ]
   },
   {
    "name": "乱藤四郎",
