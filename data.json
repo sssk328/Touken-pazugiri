@@ -1130,6 +1130,20 @@
    "yukari": "",
    "no": "039",
    "skillType": []
+  },
+  {
+   "name": "へし切長谷部",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "040",
+   "skillType": []
   }
  ],
  "limit": [
