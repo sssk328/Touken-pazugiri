@@ -780,6 +780,20 @@
    "yukari": "",
    "no": "014",
    "skillType": []
+  },
+  {
+   "name": "前田藤四郎",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "短刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "015",
+   "skillType": []
   }
  ],
  "limit": [
