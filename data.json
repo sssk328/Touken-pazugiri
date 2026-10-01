@@ -1116,6 +1116,20 @@
    "yukari": "",
    "no": "038",
    "skillType": []
+  },
+  {
+   "name": "大俱利伽羅",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "039",
+   "skillType": []
   }
  ],
  "limit": [
