@@ -962,6 +962,20 @@
    "yukari": "",
    "no": "027",
    "skillType": []
+  },
+  {
+   "name": "小夜左文字",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "短刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "028",
+   "skillType": []
   }
  ],
  "limit": [
