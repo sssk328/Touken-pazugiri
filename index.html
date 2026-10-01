@@ -117,7 +117,7 @@ const card=(title,badge,rows,c,o)=>`<div class="card"><h4>${esc(title)}${[].conc
 function listSearch(qid,lid,c,fn,empty){const run=()=>{const q=$(qid).value.trim().toLowerCase(),hit=SCH[c].a().filter(o=>!q||searchable(o).includes(q));$(lid).innerHTML=hit.length?hit.map(fn).join(""):`<p class="empty">${empty}</p>`};$(qid).addEventListener("input",run);run()}
 function searchPage(root,title,c,fn,ph,empty){root.innerHTML=`${h1(title)}${addb(c)}${sbox("q",ph)}<div id="l"></div>`;listSearch("#q","#l",c,fn,empty)}
 const TIERS=[10,20,30],TF={10:"lv20",20:"lv30",30:"lv35"};
-let LMODE="list";const TIER={},FOLD=new Set(),CHK={};
+let LMODE="list",GMODE="drops";const TIER={},FOLD=new Set(),CHK={};
 const LS={g:k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},s:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const chkSet=k=>CHK[k]||(CHK[k]=new Set(LS.g("lim:"+k)||[]));
 const num=s=>String(s).replace(/[０-９]/g,d=>String.fromCharCode(d.charCodeAt(0)-65248));
@@ -142,9 +142,9 @@ const on=!set.has(id),all=x=>{on?set.add(x.id):set.delete(x.id);x.k.forEach(all)
 const CHFOLD=new Set(LS.g("chfold")||[]);
 const views={
 sortie(){return h1("出陣先")+addb("sortie")+(ADMIN?'<button class="add" data-chap="1">＋ 章を追加</button>':"")+DATA.chapters.map(ch=>{const l=DATA.sortie.filter(s=>s.ch===ch);const f=CHFOLD.has(ch);return `<h2><button type="button" class="chh" data-ch="${esc(ch)}" aria-expanded="${!f}">${esc(FW(ch))}<span class="chev" aria-hidden="true"></span></button></h2>`+(f?"":l.length?l.map(s=>card(s.name,"",[["推奨Lv",s.lv],["有利刀種",s.type],["アイテム",s.items]],"sortie",s)).join(""):'<p class="empty">まだ登録がありません。</p>')}).join("")},
-gifts(root){root.innerHTML=`${h1("贈物")}<h2>ドロップ素材</h2>${addb("drops")}${sbox("q1","ドロップ素材を検索")}<div id="l1"></div><h2>合成アイテム</h2>${addb("crafts")}${sbox("q2","合成アイテムを検索")}<div id="l2"></div>`;
-listSearch("#q1","#l1","drops",o=>card(o.name,"",[["入手場所",o.where],["関連贈物",o.related],["必要男士",o.men]],"drops",o),"該当する贈物がありません。");
-listSearch("#q2","#l2","crafts",o=>card(o.name,"",[["必要素材",o.mats],["必要男士",o.men]],"crafts",o),"該当する贈物がありません。")},
+gifts(root){const c=GMODE,fn=c==="drops"?o=>card(o.name,"",[["入手場所",o.where],["関連贈物",o.related],["必要男士",o.men]],"drops",o):o=>card(o.name,"",[["必要素材",o.mats],["必要男士",o.men]],"crafts",o);
+root.innerHTML=`${h1("贈物")}<div class="modes"><button type="button" class="mode" data-gmode="drops" aria-pressed="${c==="drops"}">ドロップ素材</button><button type="button" class="mode" data-gmode="crafts" aria-pressed="${c==="crafts"}">合成アイテム</button></div>${addb(c)}${sbox("q",SCH[c].t+"を検索")}<div id="l"></div>`;
+listSearch("#q","#l",c,fn,"該当する贈物がありません。")},
 yukari(root){searchPage(root,"ゆかり","yukari",o=>card(o.name,"",[["対象男士",o.men],["関連素材",o.mats]],"yukari",o),"検索","該当するゆかりがありません。")},
 men(root){const sel={sword:new Set(),color:new Set(),skillType:new Set(),ver:new Set(),look:new Set()};
 const g=(k,l,a)=>`<div class="fgroup"><b>${l}</b><div class="chips">${a.map(o=>`<button type="button" class="chip" data-k="${k}" data-v="${o}" aria-pressed="false">${o}</button>`).join("")}</div></div>`;
@@ -203,8 +203,8 @@ modal(`<h3>${first?"管理者番号を設定":"管理者番号"}</h3><input id="
 if(a==="cancel")return d.close();const v=$("#pw").value.trim();if(!v)return;const h=await sha(v);
 if(first){DATA.adminHash=h}else if(h!==DATA.adminHash){$("#msg").textContent="番号が違います。";return}
 ADMIN=true;try{sessionStorage.setItem("adm","1")}catch(e){}d.close();first?commit():(route(),ghLoad())})}
-document.addEventListener("click",e=>{const t=e.target,tb=t.closest&&t.closest(".tipb");if(tb){showTip(tb);return}hideTip();const b=t.closest&&t.closest("[data-add],[data-edit],[data-chap],[data-out],[data-gh],[data-ch],[data-mode],[data-tier],[data-ck],[data-fold],.chip,#sakura");if(!b)return;
-if(b.id==="sakura")login();else if(b.dataset.ch){CHFOLD.has(b.dataset.ch)?CHFOLD.delete(b.dataset.ch):CHFOLD.add(b.dataset.ch);LS.s("chfold",[...CHFOLD]);route()}else if(b.dataset.mode){LMODE=b.dataset.mode;route()}else if(b.dataset.tier||b.dataset.ck||b.dataset.fold){const el=b.closest(".card"),i=+el.dataset.lc;limAct(b,DATA.limit[i]);el.outerHTML=lcard(DATA.limit[i],i)}else if(b.classList.contains("chip")){chipFn&&chipFn(b)}
+document.addEventListener("click",e=>{const t=e.target,tb=t.closest&&t.closest(".tipb");if(tb){showTip(tb);return}hideTip();const b=t.closest&&t.closest("[data-add],[data-edit],[data-chap],[data-out],[data-gh],[data-ch],[data-mode],[data-gmode],[data-tier],[data-ck],[data-fold],.chip,#sakura");if(!b)return;
+if(b.id==="sakura")login();else if(b.dataset.ch){CHFOLD.has(b.dataset.ch)?CHFOLD.delete(b.dataset.ch):CHFOLD.add(b.dataset.ch);LS.s("chfold",[...CHFOLD]);route()}else if(b.dataset.mode){LMODE=b.dataset.mode;route()}else if(b.dataset.gmode){GMODE=b.dataset.gmode;route()}else if(b.dataset.tier||b.dataset.ck||b.dataset.fold){const el=b.closest(".card"),i=+el.dataset.lc;limAct(b,DATA.limit[i]);el.outerHTML=lcard(DATA.limit[i],i)}else if(b.classList.contains("chip")){chipFn&&chipFn(b)}
 else if(b.dataset.add)form(b.dataset.add,-1);else if(b.dataset.edit){const[c,i]=b.dataset.edit.split(":");form(c,+i)}
 else if(b.dataset.chap)chapForm();else if(b.dataset.gh)ghForm(false);else if(b.dataset.out){ADMIN=false;try{sessionStorage.removeItem("adm")}catch(e){}route()}});
 window.addEventListener("hashchange",()=>{route();window.scrollTo(0,0)});$("#nav").innerHTML=PAGES.map(([i,l])=>`<a href="#${i}">${l}</a>`).join("");$("#main").innerHTML='<p class="empty">読み込み中…</p>';
