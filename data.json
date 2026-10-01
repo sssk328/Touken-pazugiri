@@ -806,14 +806,16 @@
    "ver": "通常",
    "look": "戦装束",
    "sword": "短刀",
-   "color": "",
-   "need": "",
-   "hp": "",
-   "atk": "",
-   "skill": "",
-   "yukari": "",
+   "color": "青",
+   "need": "15",
+   "hp": "473",
+   "atk": "60",
+   "skill": "味方全員にガード率上昇〈中－・5手〉を付与",
+   "yukari": "兄弟",
    "no": "016",
-   "skillType": []
+   "skillType": [
+    "補助"
+   ]
   },
   {
    "name": "五虎退",
