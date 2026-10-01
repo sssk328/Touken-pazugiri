@@ -920,6 +920,20 @@
    "yukari": "",
    "no": "024",
    "skillType": []
+  },
+  {
+   "name": "燭台切光忠",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "太刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "025",
+   "skillType": []
   }
  ],
  "limit": [
