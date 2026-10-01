@@ -836,6 +836,20 @@
    "yukari": "",
    "no": "018",
    "skillType": []
+  },
+  {
+   "name": "乱藤四郎",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "短刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "019",
+   "skillType": []
   }
  ],
  "limit": [
