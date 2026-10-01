@@ -93,7 +93,7 @@ sortie:{t:"ステージ",a:()=>DATA.sortie,f:[["ch","章","chapters"],["name","�
 drops:{t:"ドロップ素材",a:()=>DATA.gifts.drops,f:[["name","名前"],["where","入手場所"],["related","関連贈物"],["men","必要男士"]]},
 crafts:{t:"合成アイテム",a:()=>DATA.gifts.crafts,f:[["name","名前"],["mats","必要素材"],["men","必要男士"]]},
 yukari:{t:"ゆかり",a:()=>DATA.yukari,f:[["name","名前"],["men","対象男士"],["mats","関連素材"]]},
-men:{t:"刀剣男士",a:()=>DATA.men,f:[["name","名前"],["ver","レア度","ver"],["look","姿","look"],["sword","刀種","sword"],["color","奥義色","color"],["need","発動必要数"],["skill","能力"],["skillType","能力種別","skillType"],["no","通し番号（非公開・管理者用）"]]},
+men:{t:"刀剣男士",a:()=>DATA.men,f:[["name","名前"],["ver","レア度","ver"],["look","姿","look"],["sword","刀種","sword"],["color","奥義色","color"],["need","発動必要数"],["skill","能力"],["skillType","能力種","skillType"],["no","通し番号（非公開・管理者用）"]]},
 limit:{t:"上限解放",a:()=>DATA.limit,f:[["no","刀剣男士","menno"],["lv20","Lv10→Lv20"],["lv30","Lv20→Lv30"],["lv35","Lv30→Lv35"]]},
 ema:{t:"絵馬",a:()=>DATA.ema,f:[["name","絵馬の名称"],["rare","レア度","rarity"],["param","パラメータ","param"],["acq","入手方法","acq"],["abil","能力","abil"],["skill","スキル名"],["hp","初期値 体力"],["atk","初期値 攻撃"],["d1","Lv 1 説明文"],["d2","Lv 2 説明文"],["d3","Lv 3 説明文"]]}};
 let ADMIN=false,chipFn=null;try{ADMIN=sessionStorage.getItem("adm")==="1"}catch(e){}
@@ -148,7 +148,7 @@ listSearch("#q","#l",c,fn,"該当する贈物がありません。")},
 yukari(root){searchPage(root,"ゆかり","yukari",o=>card(o.name,"",[["対象男士",o.men],["関連素材",o.mats]],"yukari",o),"検索","該当するゆかりがありません。")},
 men(root){const sel={sword:new Set(),color:new Set(),skillType:new Set(),ver:new Set(),look:new Set()};
 const g=(k,l,a)=>`<div class="fgroup"><b>${l}</b><div class="chips">${a.map(o=>`<button type="button" class="chip" data-k="${k}" data-v="${o}" aria-pressed="false">${o}</button>`).join("")}</div></div>`;
-root.innerHTML=`${h1("刀剣男士")}${addb("men")}<div class="filters">${g("sword","刀種",SWORDS)}${g("color","奥義色",COLORS)}${g("skillType","能力種",SKILLS)}${g("ver","レア度",VERS)}${g("look","姿",LOOKS)}</div><p class="count" id="cnt"></p><div id="list"></div>`;
+root.innerHTML=`${h1("刀剣男士")}${addb("men")}<div class="filters">${g("sword","刀種",SWORDS)}${g("color","奥義色",COLORS)}${g("skillType","能力",SKILLS)}${g("ver","レア度",VERS)}${g("look","姿",LOOKS)}</div><p class="count" id="cnt"></p><div id="list"></div>`;
 const run=()=>{const hit=DATA.men.filter(m=>Object.keys(sel).every(k=>!sel[k].size||sel[k].has(m[k])));$("#cnt").textContent=`${hit.length}件`;$("#list").innerHTML=hit.length?hit.map(m=>card(m.name,[m.ver,m.look],[["刀種",m.sword],["奥義色",m.color],["発動必要数",m.need],["能力",m.skill],["能力種別",m.skillType]],"men",m)).join(""):'<p class="empty">条件に合う刀剣男士がいません。絞り込みを解除してください。</p>'};
 chipFn=b=>{const s=sel[b.dataset.k],v=b.dataset.v;s.has(v)?s.delete(v):s.add(v);b.setAttribute("aria-pressed",s.has(v));run()};run()},
 limit(root){root.innerHTML=`${h1("上限解放")}<div class="modes"><button type="button" class="mode" data-mode="list" aria-pressed="${LMODE==="list"}">一覧</button><button type="button" class="mode" data-mode="check" aria-pressed="${LMODE==="check"}">チェックリスト</button></div>${addb("limit")}${sbox("q","検索")}<div id="l"></div>`;
