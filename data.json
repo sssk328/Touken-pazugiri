@@ -758,14 +758,16 @@
    "ver": "通常",
    "look": "戦装束",
    "sword": "短刀",
-   "color": "",
-   "need": "",
-   "hp": "",
-   "atk": "",
-   "skill": "",
+   "color": "青",
+   "need": "14",
+   "hp": "497",
+   "atk": "68",
+   "skill": "黄色の",
    "yukari": "",
    "no": "013",
-   "skillType": []
+   "skillType": [
+    "変化"
+   ]
   },
   {
    "name": "厚藤四郎",
