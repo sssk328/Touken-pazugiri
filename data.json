@@ -990,6 +990,20 @@
    "yukari": "",
    "no": "029",
    "skillType": []
+  },
+  {
+   "name": "大和守安定",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "030",
+   "skillType": []
   }
  ],
  "limit": [
