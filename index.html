@@ -31,7 +31,12 @@ h2{font-size:1.1rem;margin:28px 0 10px;padding:2px 10px;border-left:5px solid va
 .sk{font-size:.95rem;font-weight:700;color:var(--fg);margin:2px 0 4px}.lvh{display:grid;grid-template-columns:3.4em 1fr;gap:0 10px;font-size:.88rem;margin-top:8px}.lvh b{font-weight:400;color:var(--sub);white-space:nowrap}.lvh span{overflow-wrap:anywhere}.lvd{margin:2px 0 0;font-size:.85rem;line-height:1.6;overflow-wrap:anywhere}
 dl{margin:0;display:grid;grid-template-columns:7.5em 1fr;gap:2px 10px;font-size:.88rem}
 dt{color:var(--sub)}dd{margin:0;overflow-wrap:anywhere}
-.ph{color:#888}
+.ph{color:#888}.dlw{overflow-x:auto;-webkit-overflow-scrolling:touch}.dlw .sc{display:block;width:max-content;min-width:100%}
+.dlw .r,.dlw .lvh{display:flex}.dlw .r{margin-bottom:2px}.dlw .lvh{margin-top:8px}
+.dlw dt,.dlw .lvh b{flex:0 0 calc(7.5em + 10px);box-sizing:border-box;padding-right:10px;position:sticky;left:0;z-index:1;background:#fff}
+.dlw .lvh b{flex-basis:calc(3.4em + 10px)}
+.dlw dd{flex:1;min-width:0;margin:0;contain:inline-size}.dlw dd.nw{white-space:nowrap;contain:none;min-width:auto}
+.dlw .lvh span{flex:1;white-space:nowrap}
 .search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--fg);font:inherit;margin:0 0 12px}
 .sbox{position:relative;margin:0 0 12px}.sbox img{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;pointer-events:none}.sbox .search{margin:0;padding-left:42px}
 .filters{display:grid;gap:12px;margin-bottom:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
@@ -92,7 +97,7 @@ const FW=s=>String(s).replace(/[0-9]/g,d=>String.fromCharCode(d.charCodeAt(0)+65
 const OPT={ver:VERS,look:LOOKS,sword:SWORDS,color:COLORS,skillType:SKILLS,rarity:RARES,param:PARAMS,acq:ACQS,abil:ABILS,get chapters(){return DATA.chapters},get menno(){return DATA.men.filter(m=>m.no).map(m=>[m.no,`${m.no} ${m.name}${m.ver?"（"+m.ver+(m.look?"・"+m.look:"")+"）":""}`])}};
 const SCH={
 sortie:{t:"ステージ",a:()=>DATA.sortie,f:[["ch","章","chapters"],["name","ステージ名"],["lv","推奨Lv"],["type","有利刀種"],["items","アイテム"]]},
-drops:{t:"ドロップ素材",a:()=>DATA.gifts.drops,f:[["name","名前"],["where","入手場所"],["related","関連贈物"],["men","必要男士"]]},
+drops:{t:"ドロップ素材",a:()=>DATA.gifts.drops,f:[["name","名前"],["where","入手場所"],["related","関連贈物"]]},
 crafts:{t:"合成アイテム",a:()=>DATA.gifts.crafts,f:[["name","名前"],["mats","必要素材"],["men","必要男士"]]},
 yukari:{t:"ゆかり",a:()=>DATA.yukari,f:[["name","名前"],["men","対象男士"],["mats","関連素材"]]},
 men:{t:"刀剣男士",a:()=>DATA.men,f:[["name","名前"],["ver","レア度","ver"],["look","姿","look"],["sword","刀種","sword"],["color","奥義色","color"],["need","発動数"],["hp","初期値 体力"],["atk","初期値 攻撃"],["skill","能力"],["yukari","ゆかり"],["skillType","能力","skillType",1],["no","通し番号（非公開・管理者用）"]]},
@@ -115,7 +120,7 @@ const body=d?d.where:c&&c.mats,t=document.createElement("div");t.className="tipb
 const r=b.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight,cx=r.left+scrollX+r.width/2,left=Math.min(Math.max(cx-w/2,scrollX+8),scrollX+innerWidth-w-8),up=r.top>h+170;
 t.classList.add(up?"up":"below");t.style.left=left+"px";t.style.top=(up?r.top+scrollY-h-10:r.bottom+scrollY+10)+"px";t.style.setProperty("--ax",Math.min(Math.max(cx-left,18),w-18)+"px");tipEl=t;tipFor=b}
 const addb=(c,l)=>ADMIN?`<button class="add" data-add="${c}">＋ ${l||SCH[c].t+"を追加"}</button>`:"";
-const card=(title,badge,rows,c,o)=>`<div class="card"${c==="men"&&o&&ECOL[o.color]?` style="border-left-color:${ECOL[o.color]}"`:""}><h4>${esc(title)}${[].concat(badge||[]).filter(Boolean).map(b=>`<span class="badge ${b.c!==undefined?b.c:BCLS[b]||""}">${esc(b.t||b)}</span>`).join("")}${ADMIN&&o&&o.no&&(c==="men"||c==="limit")?`<span class="no">No.${esc(o.no)}</span>`:""}${ADMIN&&c?`<button class="edit" data-edit="${c}:${SCH[c].a().indexOf(o)}">編集</button>`:""}</h4><dl>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd>`).join("")}</dl></div>`;
+const card=(title,badge,rows,c,o)=>`<div class="card${c==="men"?" mc":""}"${c==="men"&&o&&ECOL[o.color]?` style="border-left-color:${ECOL[o.color]}"`:""}><h4>${esc(title)}${[].concat(badge||[]).filter(Boolean).map(b=>`<span class="badge ${b.c!==undefined?b.c:BCLS[b]||""}">${esc(b.t||b)}</span>`).join("")}${ADMIN&&o&&o.no&&(c==="men"||c==="limit")?`<span class="no">No.${esc(o.no)}</span>`:""}${ADMIN&&c?`<button class="edit" data-edit="${c}:${SCH[c].a().indexOf(o)}">編集</button>`:""}</h4>${c==="men"||c==="sortie"?`<div class="dlw"><dl class="sc">${rows.map(([k,v])=>`<div class="r"><dt>${k}</dt><dd${v&&v.w?"":' class="nw"'}>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd></div>`).join("")}</dl></div>`:`<dl>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd>`).join("")}</dl>`}</div>`;
 function listSearch(qid,lid,c,fn,empty){const run=()=>{const q=$(qid).value.trim().toLowerCase(),hit=SCH[c].a().filter(o=>!q||searchable(o).includes(q));$(lid).innerHTML=hit.length?hit.map(fn).join(""):`<p class="empty">${empty}</p>`};$(qid).addEventListener("input",run);run()}
 function searchPage(root,title,c,fn,ph,empty){root.innerHTML=`${h1(title)}${addb(c)}${sbox("q",ph)}<div id="l"></div>`;listSearch("#q","#l",c,fn,empty)}
 const TIERS=[10,20,30],TF={10:"lv20",20:"lv30",30:"lv35"};
@@ -144,14 +149,14 @@ const on=!set.has(id),all=x=>{on?set.add(x.id):set.delete(x.id);x.k.forEach(all)
 const CHFOLD=new Set(LS.g("chfold")||[]);
 const views={
 sortie(){return h1("出陣先")+addb("sortie")+(ADMIN?'<button class="add" data-chap="1">＋ 章を追加</button>':"")+DATA.chapters.map(ch=>{const l=DATA.sortie.filter(s=>s.ch===ch);const f=CHFOLD.has(ch);return `<h2><button type="button" class="chh" data-ch="${esc(ch)}" aria-expanded="${!f}">${esc(FW(ch))}<span class="chev" aria-hidden="true"></span></button></h2>`+(f?"":l.length?l.map(s=>card(s.name,"",[["推奨Lv",s.lv],["有利刀種",s.type],["アイテム",s.items]],"sortie",s)).join(""):'<p class="empty">まだ登録がありません。</p>')}).join("")},
-gifts(root){const c=GMODE,fn=c==="drops"?o=>card(o.name,"",[["入手場所",o.where],["関連贈物",o.related],["必要男士",o.men]],"drops",o):o=>card(o.name,"",[["必要素材",o.mats],["必要男士",o.men]],"crafts",o);
+gifts(root){const c=GMODE,fn=c==="drops"?o=>card(o.name,"",[["入手場所",o.where],["関連贈物",o.related]],"drops",o):o=>card(o.name,"",[["必要素材",o.mats],["必要男士",o.men]],"crafts",o);
 root.innerHTML=`${h1("贈物")}<div class="modes"><button type="button" class="mode" data-gmode="drops" aria-pressed="${c==="drops"}">ドロップ素材</button><button type="button" class="mode" data-gmode="crafts" aria-pressed="${c==="crafts"}">合成アイテム</button></div>${addb(c)}${sbox("q",SCH[c].t+"を検索")}<div id="l"></div>`;
 listSearch("#q","#l",c,fn,"該当する贈物がありません。")},
 yukari(root){searchPage(root,"ゆかり","yukari",o=>card(o.name,"",[["対象男士",o.men],["関連素材",o.mats]],"yukari",o),"検索","該当するゆかりがありません。")},
 men(root){const sel={sword:new Set(),color:new Set(),skillType:new Set(),ver:new Set(),look:new Set()};
 const g=(k,l,a)=>`<div class="fgroup"><b>${l}</b><div class="chips">${a.map(o=>`<button type="button" class="chip" data-k="${k}" data-v="${o}" aria-pressed="false">${o}</button>`).join("")}</div></div>`;
 root.innerHTML=`${h1("刀剣男士")}${addb("men")}<div class="filters">${g("sword","刀種",SWORDS)}${g("color","奥義色",COLORS)}${g("skillType","能力",SKILLS)}${g("ver","レア度",VERS)}${g("look","姿",LOOKS)}</div><p class="count" id="cnt"></p><div id="list"></div>`;
-const run=()=>{const hit=DATA.men.filter(m=>Object.keys(sel).every(k=>!sel[k].size||[].concat(m[k]||[]).some(v=>sel[k].has(v))));$("#cnt").textContent=`${hit.length}件`;$("#list").innerHTML=hit.length?hit.map(m=>card(m.name,[m.ver,m.look],[["刀種",m.sword],["奥義色",m.color],["発動数",m.need],["初期値",{h:[m.hp&&"体力 "+br(m.hp),m.atk&&"攻撃 "+br(m.atk)].filter(Boolean).join("／")}],["能力",m.skill],["ゆかり",m.yukari]],"men",m)).join(""):'<p class="empty">条件に合う刀剣男士がいません。絞り込みを解除してください。</p>'};
+const run=()=>{const hit=DATA.men.filter(m=>Object.keys(sel).every(k=>!sel[k].size||[].concat(m[k]||[]).some(v=>sel[k].has(v))));$("#cnt").textContent=`${hit.length}件`;$("#list").innerHTML=hit.length?hit.map(m=>card(m.name,[m.ver,m.look],[["刀種",m.sword],["奥義色",m.color],["発動数",m.need],["初期値",{h:[m.hp&&"体力 "+br(m.hp),m.atk&&"攻撃 "+br(m.atk)].filter(Boolean).join("／")}],["能力",{h:m.skill?br(m.skill):"",n:1}],["ゆかり",{h:m.yukari?br(m.yukari):"",w:1}]],"men",m)).join(""):'<p class="empty">条件に合う刀剣男士がいません。絞り込みを解除してください。</p>'};
 chipFn=b=>{const s=sel[b.dataset.k],v=b.dataset.v;s.has(v)?s.delete(v):s.add(v);b.setAttribute("aria-pressed",s.has(v));run()};run()},
 limit(root){root.innerHTML=`${h1("上限解放")}<div class="modes"><button type="button" class="mode" data-mode="list" aria-pressed="${LMODE==="list"}">一覧</button><button type="button" class="mode" data-mode="check" aria-pressed="${LMODE==="check"}">チェックリスト</button></div>${addb("limit")}${sbox("q","検索")}<div id="l"></div>`;
 listSearch("#q","#l","limit",o=>{if(LMODE==="check")return lcard(o,DATA.limit.indexOf(o));const m=linkedMan(o);return card(m?m.name:o.name||"（未設定）",m?[m.ver,m.look]:[],[["Lv10→Lv20",{h:it(o.lv20)}],["Lv20→Lv30",{h:it(o.lv30)}],["Lv30→Lv35",{h:it(o.lv35)}]],"limit",o)},"該当する刀剣男士がいません。")},
@@ -161,7 +166,7 @@ return `<div class="lvh"><b>初期値</b><span>${st||ph}</span></div>`+[1,2,3].m
 const g=(k,l,a)=>`<div class="fgroup"><b>${l}</b><div class="chips">${a.map(o=>`<button type="button" class="chip" data-k="${k}" data-v="${o}" aria-pressed="false">${o}</button>`).join("")}</div></div>`;
 root.innerHTML=`${h1("絵馬")}${addb("ema")}<div class="filters">${g("rare","レア度",RARES)}${g("param","パラメータ",PARAMS)}${g("acq","入手方法",ACQS)}${g("abil","能力",ABILS)}</div><p class="count" id="cnt"></p><div id="list"></div>`;
 const run=()=>{const hit=DATA.ema.filter(o=>Object.keys(sel).every(k=>!sel[k].size||sel[k].has(o[k])));$("#cnt").textContent=`${hit.length}件`;
-$("#list").innerHTML=hit.length?hit.map(o=>card(o.name,[o.rare,o.acq&&{t:o.acq,c:"acq"}],[],"ema",o).replace("<dl></dl>",()=>`<div class="sk">${val(o.skill)}</div>${lv(o)}`)).join(""):'<p class="empty">条件に合う絵馬がありません。絞り込みを解除してください。</p>'};
+$("#list").innerHTML=hit.length?hit.map(o=>card(o.name,[o.rare,o.acq&&{t:o.acq,c:"acq"}],[],"ema",o).replace("<dl></dl>",()=>`<div class="sk">${val(o.skill)}</div><div class="dlw"><div class="sc">${lv(o)}</div></div>`)).join(""):'<p class="empty">条件に合う絵馬がありません。絞り込みを解除してください。</p>'};
 chipFn=b=>{const s=sel[b.dataset.k],v=b.dataset.v;s.has(v)?s.delete(v):s.add(v);b.setAttribute("aria-pressed",s.has(v));run()};run()}};
 function route(){const id=PAGES.some(p=>p[0]===location.hash.slice(1))?location.hash.slice(1):"sortie",root=$("#main");chipFn=null;hideTip();
 $("#nav").innerHTML=PAGES.map(([i,l])=>`<a href="#${i}"${i===id?' aria-current="page"':""}>${l}</a>`).join("");
