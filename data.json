@@ -5,18 +5,11 @@
    "name": "1-2",
    "lv": "",
    "type": "",
-   "items": "水"
+   "items": ""
   },
   {
    "ch": "第1章",
    "name": "1-3",
-   "lv": "",
-   "type": "",
-   "items": ""
-  },
-  {
-   "ch": "第2章",
-   "name": "2-2",
    "lv": "",
    "type": "",
    "items": ""
@@ -56,7 +49,8 @@
    "color": "",
    "need": "",
    "skill": "",
-   "skillType": ""
+   "skillType": "",
+   "no": "001"
   },
   {
    "name": "三日月宗近",
@@ -66,16 +60,16 @@
    "color": "",
    "need": "",
    "skill": "",
-   "skillType": ""
+   "skillType": "",
+   "no": "002"
   }
  ],
  "limit": [
   {
    "name": "三日月宗近",
-   "rare": "",
    "lv30": "",
    "lv35": "",
-   "where": ""
+   "no": "001"
   }
  ],
  "ema": [
@@ -90,5 +84,5 @@
   "第2章",
   "第3章"
  ],
- "adminHash": "04b1aade19bdfdbb2287b701d6933dd505e5bd97780c9b1589fb04cc9df2c63c"
+ "adminHash": ""
 }
