@@ -948,6 +948,20 @@
    "yukari": "",
    "no": "026",
    "skillType": []
+  },
+  {
+   "name": "宗三左文字",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "027",
+   "skillType": []
   }
  ],
  "limit": [
