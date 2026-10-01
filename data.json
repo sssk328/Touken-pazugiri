@@ -794,6 +794,20 @@
    "yukari": "",
    "no": "015",
    "skillType": []
+  },
+  {
+   "name": "秋田藤四郎",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "短刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "016",
+   "skillType": []
   }
  ],
  "limit": [
