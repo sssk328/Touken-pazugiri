@@ -850,6 +850,20 @@
    "yukari": "",
    "no": "019",
    "skillType": []
+  },
+  {
+   "name": "薬研藤四郎",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "短刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "020",
+   "skillType": []
   }
  ],
  "limit": [
