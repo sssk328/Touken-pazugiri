@@ -28,7 +28,7 @@ h2{font-size:1.1rem;margin:28px 0 10px;padding:2px 10px;border-left:5px solid va
 .card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--g);border-radius:8px;padding:12px 14px;margin:0 0 10px}
 .card h4{margin:0 0 6px;font-size:1.02rem;color:var(--fg);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .badge{font-size:.75rem;font-weight:700;background:var(--g);color:#fff;border-radius:8px;padding:1px 10px;line-height:1.6}.badge.rare{background:var(--gold)}.badge.normal{background:#595959}.badge.battle{background:#8C8C8C}.badge.event{background:#B7603A}.badge.r1{background:#C2452F}.badge.r2{background:#2E8B6B}.badge.r3{background:#F0A24B;color:#3b2500}.badge.r4{background:#BDBDBD;color:#333}
-.sk{font-size:.95rem;font-weight:700;color:var(--fg);margin:2px 0 4px}.lvh{display:grid;grid-template-columns:3.4em 1fr;gap:0 10px;font-size:.88rem;margin-top:8px}.lvh b{font-weight:400;color:var(--sub);white-space:nowrap}.lvd{margin:2px 0 0;font-size:.85rem;line-height:1.6;overflow-wrap:anywhere}
+.sk{font-size:.95rem;font-weight:700;color:var(--fg);margin:2px 0 4px}.lvh{display:grid;grid-template-columns:3.4em 1fr;gap:0 10px;font-size:.88rem;margin-top:8px}.lvh b{font-weight:400;color:var(--sub);white-space:nowrap}.lvh span{overflow-wrap:anywhere}.lvd{margin:2px 0 0;font-size:.85rem;line-height:1.6;overflow-wrap:anywhere}
 dl{margin:0;display:grid;grid-template-columns:7.5em 1fr;gap:2px 10px;font-size:.88rem}
 dt{color:var(--sub)}dd{margin:0;overflow-wrap:anywhere}
 .ph{color:#888}
@@ -75,7 +75,7 @@ ul.ck{list-style:none;margin:0;padding:0}ul.ck ul.ck{margin:2px 0 4px 14px;paddi
 <nav id="nav" aria-label="ページ切り替え"></nav>
 </div>
 <main id="main"></main>
-<script type="application/json" id="store">{"sortie": [{"ch": "第1章", "name": "1-2", "lv": "", "type": "", "items": ""}, {"ch": "第1章", "name": "1-3", "lv": "", "type": "", "items": ""}], "gifts": {"drops": [{"name": "水", "where": "", "related": "", "men": "", "yukari": ""}], "crafts": [{"name": "臼と杵", "mats": "", "men": ""}]}, "yukari": [{"name": "天下五剣", "men": "", "mats": ""}], "men": [{"name": "三日月宗近", "ver": "レア", "look": "戦装束", "sword": "太刀", "color": "", "need": "", "skill": "", "skillType": "", "no": "001"}, {"name": "三日月宗近", "ver": "通常", "look": "イベント", "sword": "太刀", "color": "", "need": "", "skill": "", "skillType": "", "no": "002"}], "limit": [{"name": "三日月宗近", "lv30": "", "lv35": "", "no": "001"}], "ema": [{"name": "星明かりの花", "rare": "", "skill": "", "hp1": "", "atk1": "", "d1": "", "hp2": "", "atk2": "", "d2": "", "hp3": "", "atk3": "", "d3": ""}], "chapters": ["第1章", "第2章", "第3章"], "adminHash": ""}</script>
+<script type="application/json" id="store">{"sortie": [{"ch": "第1章", "name": "1-2", "lv": "", "type": "", "items": ""}, {"ch": "第1章", "name": "1-3", "lv": "", "type": "", "items": ""}], "gifts": {"drops": [{"name": "水", "where": "", "related": "", "men": "", "yukari": ""}], "crafts": [{"name": "臼と杵", "mats": "", "men": ""}]}, "yukari": [{"name": "天下五剣", "men": "", "mats": ""}], "men": [{"name": "三日月宗近", "ver": "レア", "look": "戦装束", "sword": "太刀", "color": "", "need": "", "skill": "", "skillType": "", "no": "001"}, {"name": "三日月宗近", "ver": "通常", "look": "イベント", "sword": "太刀", "color": "", "need": "", "skill": "", "skillType": "", "no": "002"}], "limit": [{"name": "三日月宗近", "lv30": "", "lv35": "", "no": "001"}], "ema": [{"name": "星明かりの花", "rare": "", "skill": "", "hp": "", "atk": "", "d1": "", "d2": "", "d3": ""}], "chapters": ["第1章", "第2章", "第3章"], "adminHash": ""}</script>
 <script>
 const $=(s,r=document)=>r.querySelector(s);
 let DATA=JSON.parse($("#store").textContent);
@@ -90,16 +90,16 @@ const FW=s=>String(s).replace(/[0-9]/g,d=>String.fromCharCode(d.charCodeAt(0)+65
 const OPT={ver:VERS,look:LOOKS,sword:SWORDS,color:COLORS,skillType:SKILLS,rarity:RARES,get chapters(){return DATA.chapters},get menno(){return DATA.men.filter(m=>m.no).map(m=>[m.no,`${m.no} ${m.name}${m.ver?"（"+m.ver+(m.look?"・"+m.look:"")+"）":""}`])}};
 const SCH={
 sortie:{t:"ステージ",a:()=>DATA.sortie,f:[["ch","章","chapters"],["name","ステージ名"],["lv","推奨Lv"],["type","有利刀種"],["items","アイテム"]]},
-drops:{t:"ドロップ素材",a:()=>DATA.gifts.drops,f:[["name","名前"],["where","入手場所"],["related","関連贈物"]]},
+drops:{t:"ドロップ素材",a:()=>DATA.gifts.drops,f:[["name","名前"],["where","入手場所"],["related","関連贈物"],["men","必要男士"]]},
 crafts:{t:"合成アイテム",a:()=>DATA.gifts.crafts,f:[["name","名前"],["mats","必要素材"],["men","必要男士"]]},
 yukari:{t:"ゆかり",a:()=>DATA.yukari,f:[["name","名前"],["men","対象男士"],["mats","関連素材"]]},
 men:{t:"刀剣男士",a:()=>DATA.men,f:[["name","名前"],["ver","レア度","ver"],["look","姿","look"],["sword","刀種","sword"],["color","奥義色","color"],["need","発動必要数"],["skill","能力"],["skillType","能力種別","skillType"],["no","通し番号（非公開・管理者用）"]]},
 limit:{t:"上限解放",a:()=>DATA.limit,f:[["no","刀剣男士","menno"],["lv20","Lv10→Lv20"],["lv30","Lv20→Lv30"],["lv35","Lv30→Lv35"]]},
-ema:{t:"絵馬",a:()=>DATA.ema,f:[["name","名前"],["rare","レア度","rarity"],["skill","スキル名"],["hp1","Lv 1 体力"],["atk1","Lv 1 攻撃"],["d1","Lv 1 説明文"],["hp2","Lv 2 体力"],["atk2","Lv 2 攻撃"],["d2","Lv 2 説明文"],["hp3","Lv 3 体力"],["atk3","Lv 3 攻撃"],["d3","Lv 3 説明文"]]}};
+ema:{t:"絵馬",a:()=>DATA.ema,f:[["name","絵馬の名称"],["rare","レア度","rarity"],["skill","スキル名"],["hp","初期値 体力"],["atk","初期値 攻撃"],["d1","Lv 1 説明文"],["d2","Lv 2 説明文"],["d3","Lv 3 説明文"]]}};
 let ADMIN=false,chipFn=null;try{ADMIN=sessionStorage.getItem("adm")==="1"}catch(e){}
 const linkedMan=o=>o.no&&DATA.men.find(m=>m.no===o.no);
 const nextNo=()=>String(Math.max(0,...DATA.men.map(m=>parseInt(m.no)||0))+1).padStart(3,"0");
-function fixNos(){(DATA.ema||[]).forEach(o=>{const mv=(a,b)=>{if(o[a]&&!o[b])o[b]=o[a];delete o[a]};mv("lv1","d1");mv("lv2","d2");mv("lv3","d3");mv("effect","d1")});DATA.men.forEach(m=>{if(!m.no)m.no=nextNo()});DATA.limit.forEach(o=>{if(!o.no){const c=DATA.men.filter(m=>m.name===o.name);if(c.length===1)o.no=c[0].no}})}
+function fixNos(){(DATA.ema||[]).forEach(o=>{const mv=(a,b)=>{if(o[a]&&!o[b])o[b]=o[a];delete o[a]};mv("lv1","d1");mv("lv2","d2");mv("lv3","d3");mv("effect","d1");mv("hp1","hp");mv("atk1","atk");["hp2","hp3","atk2","atk3"].forEach(k=>delete o[k])});DATA.men.forEach(m=>{if(!m.no)m.no=nextNo()});DATA.limit.forEach(o=>{if(!o.no){const c=DATA.men.filter(m=>m.name===o.name);if(c.length===1)o.no=c[0].no}})}
 const searchable=o=>{const m=linkedMan(o)||{};return Object.entries({...o,n:m.name,v:m.ver,l:m.look}).filter(([k])=>k!=="no").map(e=>e[1]||"").join(" ").toLowerCase()};
 const sbox=(id,l)=>`<div class="sbox"><img src="${SICON}" alt=""><input class="search" id="${id}" type="search" placeholder="検索" aria-label="${l}"></div>`;
 const h1=t=>`<h1><img class="ico" src="${ICON}" alt="">${t}</h1>`;
@@ -142,7 +142,7 @@ const on=!set.has(id),all=x=>{on?set.add(x.id):set.delete(x.id);x.k.forEach(all)
 const CHFOLD=new Set(LS.g("chfold")||[]);
 const views={
 sortie(){return h1("出陣先")+addb("sortie")+(ADMIN?'<button class="add" data-chap="1">＋ 章を追加</button>':"")+DATA.chapters.map(ch=>{const l=DATA.sortie.filter(s=>s.ch===ch);const f=CHFOLD.has(ch);return `<h2><button type="button" class="chh" data-ch="${esc(ch)}" aria-expanded="${!f}">${esc(FW(ch))}<span class="chev" aria-hidden="true"></span></button></h2>`+(f?"":l.length?l.map(s=>card(s.name,"",[["推奨Lv",s.lv],["有利刀種",s.type],["アイテム",s.items]],"sortie",s)).join(""):'<p class="empty">まだ登録がありません。</p>')}).join("")},
-gifts(root){const c=GMODE,fn=c==="drops"?o=>card(o.name,"",[["入手場所",o.where],["関連贈物",o.related]],"drops",o):o=>card(o.name,"",[["必要素材",o.mats],["必要男士",o.men]],"crafts",o);
+gifts(root){const c=GMODE,fn=c==="drops"?o=>card(o.name,"",[["入手場所",o.where],["関連贈物",o.related],["必要男士",o.men]],"drops",o):o=>card(o.name,"",[["必要素材",o.mats],["必要男士",o.men]],"crafts",o);
 root.innerHTML=`${h1("贈物")}<div class="modes"><button type="button" class="mode" data-gmode="drops" aria-pressed="${c==="drops"}">ドロップ素材</button><button type="button" class="mode" data-gmode="crafts" aria-pressed="${c==="crafts"}">合成アイテム</button></div>${addb(c)}${sbox("q",SCH[c].t+"を検索")}<div id="l"></div>`;
 listSearch("#q","#l",c,fn,"該当する贈物がありません。")},
 yukari(root){searchPage(root,"ゆかり","yukari",o=>card(o.name,"",[["対象男士",o.men],["関連素材",o.mats]],"yukari",o),"検索","該当するゆかりがありません。")},
@@ -153,7 +153,8 @@ const run=()=>{const hit=DATA.men.filter(m=>Object.keys(sel).every(k=>!sel[k].si
 chipFn=b=>{const s=sel[b.dataset.k],v=b.dataset.v;s.has(v)?s.delete(v):s.add(v);b.setAttribute("aria-pressed",s.has(v));run()};run()},
 limit(root){root.innerHTML=`${h1("上限解放")}<div class="modes"><button type="button" class="mode" data-mode="list" aria-pressed="${LMODE==="list"}">一覧</button><button type="button" class="mode" data-mode="check" aria-pressed="${LMODE==="check"}">チェックリスト</button></div>${addb("limit")}${sbox("q","検索")}<div id="l"></div>`;
 listSearch("#q","#l","limit",o=>{if(LMODE==="check")return lcard(o,DATA.limit.indexOf(o));const m=linkedMan(o);return card(m?m.name:o.name||"（未設定）",m?[m.ver,m.look]:[],[["Lv10→Lv20",{h:it(o.lv20)}],["Lv20→Lv30",{h:it(o.lv30)}],["Lv30→Lv35",{h:it(o.lv35)}]],"limit",o)},"該当する刀剣男士がいません。")},
-ema(root){const lv=o=>[1,2,3].map(i=>{const st=[o["hp"+i]&&"体力 "+br(o["hp"+i]),o["atk"+i]&&"攻撃 "+br(o["atk"+i])].filter(Boolean).join("／");return `<div class="lvh"><b>Lv ${i}</b><span>${st||'<span class="ph">未入力</span>'}</span></div>`+(o["d"+i]?`<p class="lvd">${br(o["d"+i])}</p>`:"")}).join("");
+ema(root){const lv=o=>{const st=[o.hp&&"体力 "+br(o.hp),o.atk&&"攻撃 "+br(o.atk)].filter(Boolean).join("／"),ph='<span class="ph">未入力</span>';
+return `<div class="lvh"><b>初期値</b><span>${st||ph}</span></div>`+[1,2,3].map(i=>`<div class="lvh"><b>Lv ${i}</b><span>${o["d"+i]?br(o["d"+i]):ph}</span></div>`).join("")};
 searchPage(root,"絵馬","ema",o=>card(o.name,[o.rare],[],"ema",o).replace("<dl></dl>",()=>`<div class="sk">${val(o.skill)}</div>${lv(o)}`),"検索","該当する絵馬がありません。")}};
 function route(){const id=PAGES.some(p=>p[0]===location.hash.slice(1))?location.hash.slice(1):"sortie",root=$("#main");chipFn=null;hideTip();
 $("#nav").innerHTML=PAGES.map(([i,l])=>`<a href="#${i}"${i===id?' aria-current="page"':""}>${l}</a>`).join("");
