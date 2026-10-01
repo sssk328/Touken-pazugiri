@@ -990,14 +990,16 @@
    "ver": "通常",
    "look": "戦装束",
    "sword": "打刀",
-   "color": "",
-   "need": "",
-   "hp": "",
-   "atk": "",
-   "skill": "",
-   "yukari": "",
+   "color": "青",
+   "need": "15",
+   "hp": "493",
+   "atk": "54",
+   "skill": "〈最大10体〉の〈黄〉ト餓鬼を中央に集める",
+   "yukari": "蝶",
    "no": "027",
-   "skillType": []
+   "skillType": [
+    "整頓"
+   ]
   },
   {
    "name": "小夜左文字",
