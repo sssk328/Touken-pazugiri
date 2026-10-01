@@ -1046,6 +1046,20 @@
    "yukari": "",
    "no": "033",
    "skillType": []
+  },
+  {
+   "name": "陸奥守吉行",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "034",
+   "skillType": []
   }
  ],
  "limit": [
