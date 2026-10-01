@@ -28,15 +28,23 @@ h2{font-size:1.1rem;margin:28px 0 10px;padding:2px 10px;border-left:5px solid va
 .card{background:#fff;border:1px solid var(--line);border-left:5px solid var(--g);border-radius:8px;padding:12px 14px;margin:0 0 10px}
 .card h4{margin:0 0 6px;font-size:1.02rem;color:var(--fg);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .badge{font-size:.75rem;font-weight:700;background:var(--g);color:#fff;border-radius:8px;padding:1px 10px;line-height:1.6}.badge.rare{background:var(--gold)}.badge.normal{background:#595959}.badge.battle{background:#8C8C8C}.badge.event{background:#B7603A}.badge.r1{background:#C2452F}.badge.r2{background:#2E8B6B}.badge.r3{background:#F0A24B;color:#3b2500}.badge.r4{background:#BDBDBD;color:#333}.badge.acq{background:#fff;color:var(--g);border:1px solid var(--g);padding:0 9px}
-.sk{font-size:.95rem;font-weight:700;color:var(--fg);margin:2px 0 4px}.lvh{display:grid;grid-template-columns:3.4em 1fr;gap:0 10px;font-size:.88rem;margin-top:8px}.lvh b{font-weight:400;color:var(--sub);white-space:nowrap}.lvh span{overflow-wrap:anywhere}.lvd{margin:2px 0 0;font-size:.85rem;line-height:1.6;overflow-wrap:anywhere}
+.sk{font-size:.95rem;font-weight:700;color:var(--fg);margin:2px 0 4px}.lvh{display:grid;grid-template-columns:3.4em 1fr;gap:0 10px;font-size:.88rem}.lvh b{font-weight:400;color:var(--sub);white-space:nowrap}.lvh span{overflow-wrap:anywhere}.lvd{margin:2px 0 0;font-size:.85rem;line-height:1.6;overflow-wrap:anywhere}
 dl{margin:0;display:grid;grid-template-columns:7.5em 1fr;gap:2px 10px;font-size:.88rem}
 dt{color:var(--sub)}dd{margin:0;overflow-wrap:anywhere}
-.ph{color:#888}.dlw{overflow-x:auto;-webkit-overflow-scrolling:touch}.dlw .sc{display:block;width:max-content;min-width:100%}
-.dlw .r,.dlw .lvh{display:flex}.dlw .r{margin-bottom:2px}.dlw .lvh{margin-top:8px}
-.dlw dt,.dlw .lvh b{flex:0 0 calc(7.5em + 10px);box-sizing:border-box;padding-right:10px;position:sticky;left:0;z-index:1;background:#fff}
-.dlw .lvh b{flex-basis:calc(3.4em + 10px)}
-.dlw dd{flex:1;min-width:0;margin:0;contain:inline-size}.dlw dd.nw{white-space:nowrap;contain:none;min-width:auto}
-.dlw .lvh span{flex:1;white-space:nowrap}
+.ph{color:#888}
+.dlw{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}.dlw::-webkit-scrollbar{display:none;width:0;height:0}
+.dlw .sc{display:block;width:max-content;min-width:100%;box-sizing:border-box;padding-right:24px}
+.dlw .r,.dlw .lvh{display:flex;margin:0}
+.dlw dt,.dlw .lvh b{flex:0 0 7.5em;box-sizing:border-box;padding:2px 0}
+.dlw .lvh b{flex-basis:3.4em;padding:4px 0}
+.dlw dd,.dlw .lvh>span{flex:1;min-width:0;margin:0;padding:2px 0 2px 10px;contain:inline-size}.dlw .lvh>span{padding:4px 0 4px 10px;white-space:nowrap;contain:none;min-width:auto}
+.dlw dd.nw{white-space:nowrap;contain:none;min-width:auto}
+dl.dv:not(.sc){row-gap:0}dl.dv:not(.sc) dt,dl.dv:not(.sc) dd{padding:2px 0}
+.dv{position:relative}.dv::after{content:"";position:absolute;top:3px;bottom:3px;left:var(--lx);width:1.5px;background:repeating-linear-gradient(to bottom,#b0b0b0 0 4px,transparent 4px 8px);pointer-events:none}
+.c-men{--lx:calc((3em + 7.5em + 10px) / 2)}
+.c-sortie,.c-drops,.c-crafts,.c-yukari{--lx:calc((4em + 7.5em + 10px) / 2)}
+.c-limit{--lx:calc((5.4em + 7.5em + 10px) / 2)}
+.c-ema{--lx:calc((3em + 3.4em + 10px) / 2)}
 .search{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--fg);font:inherit;margin:0 0 12px}
 .sbox{position:relative;margin:0 0 12px}.sbox img{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;pointer-events:none}.sbox .search{margin:0;padding-left:42px}
 .filters{display:grid;gap:12px;margin-bottom:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
@@ -120,7 +128,7 @@ const body=d?d.where:c&&c.mats,t=document.createElement("div");t.className="tipb
 const r=b.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight,cx=r.left+scrollX+r.width/2,left=Math.min(Math.max(cx-w/2,scrollX+8),scrollX+innerWidth-w-8),up=r.top>h+170;
 t.classList.add(up?"up":"below");t.style.left=left+"px";t.style.top=(up?r.top+scrollY-h-10:r.bottom+scrollY+10)+"px";t.style.setProperty("--ax",Math.min(Math.max(cx-left,18),w-18)+"px");tipEl=t;tipFor=b}
 const addb=(c,l)=>ADMIN?`<button class="add" data-add="${c}">＋ ${l||SCH[c].t+"を追加"}</button>`:"";
-const card=(title,badge,rows,c,o)=>`<div class="card${c==="men"?" mc":""}"${c==="men"&&o&&ECOL[o.color]?` style="border-left-color:${ECOL[o.color]}"`:""}><h4>${esc(title)}${[].concat(badge||[]).filter(Boolean).map(b=>`<span class="badge ${b.c!==undefined?b.c:BCLS[b]||""}">${esc(b.t||b)}</span>`).join("")}${ADMIN&&o&&o.no&&(c==="men"||c==="limit")?`<span class="no">No.${esc(o.no)}</span>`:""}${ADMIN&&c?`<button class="edit" data-edit="${c}:${SCH[c].a().indexOf(o)}">編集</button>`:""}</h4>${c==="men"||c==="sortie"?`<div class="dlw"><dl class="sc">${rows.map(([k,v])=>`<div class="r"><dt>${k}</dt><dd${v&&v.w?"":' class="nw"'}>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd></div>`).join("")}</dl></div>`:`<dl>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd>`).join("")}</dl>`}</div>`;
+const card=(title,badge,rows,c,o)=>`<div class="card${c==="men"?" mc":""}"${c==="men"&&o&&ECOL[o.color]?` style="border-left-color:${ECOL[o.color]}"`:""}><h4>${esc(title)}${[].concat(badge||[]).filter(Boolean).map(b=>`<span class="badge ${b.c!==undefined?b.c:BCLS[b]||""}">${esc(b.t||b)}</span>`).join("")}${ADMIN&&o&&o.no&&(c==="men"||c==="limit")?`<span class="no">No.${esc(o.no)}</span>`:""}${ADMIN&&c?`<button class="edit" data-edit="${c}:${SCH[c].a().indexOf(o)}">編集</button>`:""}</h4>${c==="men"||c==="sortie"?`<div class="dlw"><dl class="sc dv c-${c}">${rows.map(([k,v])=>`<div class="r"><dt>${k}</dt><dd${v&&v.w?"":' class="nw"'}>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd></div>`).join("")}</dl></div>`:`<dl${["drops","crafts","yukari","limit"].includes(c)?` class="dv c-${c}"`:""}>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd>`).join("")}</dl>`}</div>`;
 function listSearch(qid,lid,c,fn,empty){const run=()=>{const q=$(qid).value.trim().toLowerCase(),hit=SCH[c].a().filter(o=>!q||searchable(o).includes(q));$(lid).innerHTML=hit.length?hit.map(fn).join(""):`<p class="empty">${empty}</p>`};$(qid).addEventListener("input",run);run()}
 function searchPage(root,title,c,fn,ph,empty){root.innerHTML=`${h1(title)}${addb(c)}${sbox("q",ph)}<div id="l"></div>`;listSearch("#q","#l",c,fn,empty)}
 const TIERS=[10,20,30],TF={10:"lv20",20:"lv30",30:"lv35"};
@@ -166,7 +174,7 @@ return `<div class="lvh"><b>初期値</b><span>${st||ph}</span></div>`+[1,2,3].m
 const g=(k,l,a)=>`<div class="fgroup"><b>${l}</b><div class="chips">${a.map(o=>`<button type="button" class="chip" data-k="${k}" data-v="${o}" aria-pressed="false">${o}</button>`).join("")}</div></div>`;
 root.innerHTML=`${h1("絵馬")}${addb("ema")}<div class="filters">${g("rare","レア度",RARES)}${g("param","パラメータ",PARAMS)}${g("acq","入手方法",ACQS)}${g("abil","能力",ABILS)}</div><p class="count" id="cnt"></p><div id="list"></div>`;
 const run=()=>{const hit=DATA.ema.filter(o=>Object.keys(sel).every(k=>!sel[k].size||sel[k].has(o[k])));$("#cnt").textContent=`${hit.length}件`;
-$("#list").innerHTML=hit.length?hit.map(o=>card(o.name,[o.rare,o.acq&&{t:o.acq,c:"acq"}],[],"ema",o).replace("<dl></dl>",()=>`<div class="sk">${val(o.skill)}</div><div class="dlw"><div class="sc">${lv(o)}</div></div>`)).join(""):'<p class="empty">条件に合う絵馬がありません。絞り込みを解除してください。</p>'};
+$("#list").innerHTML=hit.length?hit.map(o=>card(o.name,[o.rare,o.acq&&{t:o.acq,c:"acq"}],[],"ema",o).replace("<dl></dl>",()=>`<div class="sk">${val(o.skill)}</div><div class="dlw"><div class="sc dv c-ema">${lv(o)}</div></div>`)).join(""):'<p class="empty">条件に合う絵馬がありません。絞り込みを解除してください。</p>'};
 chipFn=b=>{const s=sel[b.dataset.k],v=b.dataset.v;s.has(v)?s.delete(v):s.add(v);b.setAttribute("aria-pressed",s.has(v));run()};run()}};
 function route(){const id=PAGES.some(p=>p[0]===location.hash.slice(1))?location.hash.slice(1):"sortie",root=$("#main");chipFn=null;hideTip();
 $("#nav").innerHTML=PAGES.map(([i,l])=>`<a href="#${i}"${i===id?' aria-current="page"':""}>${l}</a>`).join("");
