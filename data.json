@@ -561,11 +561,12 @@
    "ver": "レア",
    "look": "戦装束",
    "sword": "太刀",
-   "color": "",
+   "color": "赤",
    "need": "",
    "skill": "",
    "skillType": "",
-   "no": "001"
+   "no": "001",
+   "yukari": ""
   },
   {
    "name": "三日月宗近",
