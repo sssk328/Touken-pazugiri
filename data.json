@@ -1228,6 +1228,20 @@
    "yukari": "",
    "no": "046",
    "skillType": []
+  },
+  {
+   "name": "御手杵",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "槍",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "047",
+   "skillType": []
   }
  ],
  "limit": [
