@@ -1158,6 +1158,20 @@
    "yukari": "",
    "no": "041",
    "skillType": []
+  },
+  {
+   "name": "獅子王",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "太刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "042",
+   "skillType": []
   }
  ],
  "limit": [
