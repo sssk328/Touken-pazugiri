@@ -1074,6 +1074,20 @@
    "yukari": "",
    "no": "035",
    "skillType": []
+  },
+  {
+   "name": "山伏国広",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "太刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "036",
+   "skillType": []
   }
  ],
  "limit": [
