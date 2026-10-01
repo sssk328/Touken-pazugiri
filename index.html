@@ -207,8 +207,13 @@ document.addEventListener("click",e=>{const t=e.target,tb=t.closest&&t.closest("
 if(b.id==="sakura")login();else if(b.dataset.mode){LMODE=b.dataset.mode;route()}else if(b.dataset.tier||b.dataset.ck||b.dataset.fold){const el=b.closest(".card"),i=+el.dataset.lc;limAct(b,DATA.limit[i]);el.outerHTML=lcard(DATA.limit[i],i)}else if(b.classList.contains("chip")){chipFn&&chipFn(b)}
 else if(b.dataset.add)form(b.dataset.add,-1);else if(b.dataset.edit){const[c,i]=b.dataset.edit.split(":");form(c,+i)}
 else if(b.dataset.chap)chapForm();else if(b.dataset.gh)ghForm(false);else if(b.dataset.out){ADMIN=false;try{sessionStorage.removeItem("adm")}catch(e){}route()}});
-window.addEventListener("hashchange",()=>{route();window.scrollTo(0,0)});fixNos();route();
-fetch("data.json?_="+Date.now()).then(x=>x.ok?x.json():null).then(d=>{if(d&&d.sortie){DATA=d;fixNos();route()}}).catch(()=>{}).then(ghLoad);
+window.addEventListener("hashchange",()=>{route();window.scrollTo(0,0)});$("#nav").innerHTML=PAGES.map(([i,l])=>`<a href="#${i}">${l}</a>`).join("");$("#main").innerHTML='<p class="empty">読み込み中…</p>';
+(async()=>{const tmo=p=>Promise.race([p,new Promise((_,j)=>setTimeout(j,6000))]);
+try{const c=GH();let d=null;
+if(c){const r=await tmo(ghGet(c,true));if(r.ok)d=await r.json()}
+if(!(d&&d.sortie)){const x=await tmo(fetch("data.json?_="+Date.now()));if(x.ok)d=await x.json()}
+if(d&&d.sortie)DATA=d}catch(e){}
+fixNos();route()})();
 </script>
 </body>
 </html>
