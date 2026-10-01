@@ -65,6 +65,7 @@ ul.ck{list-style:none;margin:0;padding:0}ul.ck ul.ck{margin:2px 0 4px 14px;paddi
 .ck.d0{font-size:1.1rem}.ck.d1{font-size:.98rem}.ck.d2{font-size:.9rem}
 .row{display:flex;align-items:center;gap:10px;padding:3px 0}.dia{background:none;border:0;padding:0;cursor:pointer;display:flex;flex:none}
 .nm{font:inherit;color:var(--fg);background:none;border:0;padding:0;text-align:left}button.nm{cursor:pointer}.row.on .nm{color:#999;text-decoration:line-through}
+.chh{display:flex;width:100%;justify-content:space-between;align-items:center;font:inherit;color:inherit;background:none;border:0;padding:0;text-align:left;cursor:pointer}.chev{color:var(--sub);font-size:.9em}.chev::before{content:"▾"}.chh[aria-expanded="false"] .chev::before{content:"▸"}
 </style>
 </head>
 <body>
@@ -136,8 +137,9 @@ if(b.dataset.fold){const f=key+"|"+t+"|"+b.dataset.fold;FOLD.has(f)?FOLD.delete(
 const set=chkSet(key+":"+t),id=b.dataset.ck,find=(ns,p)=>{for(const n of ns){if(n.id===id)return[n,p];const r=find(n.k,[...p,n]);if(r)return r}},f=find(limNodes(o,t),[]);if(!f)return;
 const on=!set.has(id),all=x=>{on?set.add(x.id):set.delete(x.id);x.k.forEach(all)};all(f[0]);
 [...f[1]].reverse().forEach(p=>p.k.every(c=>set.has(c.id))?set.add(p.id):set.delete(p.id));LS.s("lim:"+key+":"+t,[...set])}
+const CHFOLD=new Set(LS.g("chfold")||[]);
 const views={
-sortie(){return h1("出陣先")+addb("sortie")+(ADMIN?'<button class="add" data-chap="1">＋ 章を追加</button>':"")+DATA.chapters.map(ch=>{const l=DATA.sortie.filter(s=>s.ch===ch);return `<h2>${esc(FW(ch))}</h2>`+(l.length?l.map(s=>card(s.name,"",[["推奨Lv",s.lv],["有利刀種",s.type],["アイテム",s.items]],"sortie",s)).join(""):'<p class="empty">まだ登録がありません。</p>')}).join("")},
+sortie(){return h1("出陣先")+addb("sortie")+(ADMIN?'<button class="add" data-chap="1">＋ 章を追加</button>':"")+DATA.chapters.map(ch=>{const l=DATA.sortie.filter(s=>s.ch===ch);const f=CHFOLD.has(ch);return `<h2><button type="button" class="chh" data-ch="${esc(ch)}" aria-expanded="${!f}">${esc(FW(ch))}<span class="chev" aria-hidden="true"></span></button></h2>`+(f?"":l.length?l.map(s=>card(s.name,"",[["推奨Lv",s.lv],["有利刀種",s.type],["アイテム",s.items]],"sortie",s)).join(""):'<p class="empty">まだ登録がありません。</p>')}).join("")},
 gifts(root){root.innerHTML=`${h1("贈物")}<h2>ドロップ素材</h2>${addb("drops")}${sbox("q1","ドロップ素材を検索")}<div id="l1"></div><h2>合成アイテム</h2>${addb("crafts")}${sbox("q2","合成アイテムを検索")}<div id="l2"></div>`;
 listSearch("#q1","#l1","drops",o=>card(o.name,"",[["入手場所",o.where],["関連贈物",o.related],["必要男士",o.men],["ゆかり",o.yukari]],"drops",o),"該当する贈物がありません。");
 listSearch("#q2","#l2","crafts",o=>card(o.name,"",[["必要素材",o.mats],["必要男士",o.men]],"crafts",o),"該当する贈物がありません。")},
@@ -198,8 +200,8 @@ modal(`<h3>${first?"管理者番号を設定":"管理者番号"}</h3><input id="
 if(a==="cancel")return d.close();const v=$("#pw").value.trim();if(!v)return;const h=await sha(v);
 if(first){DATA.adminHash=h}else if(h!==DATA.adminHash){$("#msg").textContent="番号が違います。";return}
 ADMIN=true;try{sessionStorage.setItem("adm","1")}catch(e){}d.close();first?commit():(route(),ghLoad())})}
-document.addEventListener("click",e=>{const t=e.target,tb=t.closest&&t.closest(".tipb");if(tb){showTip(tb);return}hideTip();const b=t.closest&&t.closest("[data-add],[data-edit],[data-chap],[data-out],[data-gh],[data-mode],[data-tier],[data-ck],[data-fold],.chip,#sakura");if(!b)return;
-if(b.id==="sakura")login();else if(b.dataset.mode){LMODE=b.dataset.mode;route()}else if(b.dataset.tier||b.dataset.ck||b.dataset.fold){const el=b.closest(".card"),i=+el.dataset.lc;limAct(b,DATA.limit[i]);el.outerHTML=lcard(DATA.limit[i],i)}else if(b.classList.contains("chip")){chipFn&&chipFn(b)}
+document.addEventListener("click",e=>{const t=e.target,tb=t.closest&&t.closest(".tipb");if(tb){showTip(tb);return}hideTip();const b=t.closest&&t.closest("[data-add],[data-edit],[data-chap],[data-out],[data-gh],[data-ch],[data-mode],[data-tier],[data-ck],[data-fold],.chip,#sakura");if(!b)return;
+if(b.id==="sakura")login();else if(b.dataset.ch){CHFOLD.has(b.dataset.ch)?CHFOLD.delete(b.dataset.ch):CHFOLD.add(b.dataset.ch);LS.s("chfold",[...CHFOLD]);route()}else if(b.dataset.mode){LMODE=b.dataset.mode;route()}else if(b.dataset.tier||b.dataset.ck||b.dataset.fold){const el=b.closest(".card"),i=+el.dataset.lc;limAct(b,DATA.limit[i]);el.outerHTML=lcard(DATA.limit[i],i)}else if(b.classList.contains("chip")){chipFn&&chipFn(b)}
 else if(b.dataset.add)form(b.dataset.add,-1);else if(b.dataset.edit){const[c,i]=b.dataset.edit.split(":");form(c,+i)}
 else if(b.dataset.chap)chapForm();else if(b.dataset.gh)ghForm(false);else if(b.dataset.out){ADMIN=false;try{sessionStorage.removeItem("adm")}catch(e){}route()}});
 window.addEventListener("hashchange",()=>{route();window.scrollTo(0,0)});$("#nav").innerHTML=PAGES.map(([i,l])=>`<a href="#${i}">${l}</a>`).join("");$("#main").innerHTML='<p class="empty">読み込み中…</p>';
