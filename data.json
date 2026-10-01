@@ -1060,6 +1060,20 @@
    "yukari": "",
    "no": "034",
    "skillType": []
+  },
+  {
+   "name": "山姥切国広",
+   "ver": "通常",
+   "look": "戦装束",
+   "sword": "打刀",
+   "color": "",
+   "need": "",
+   "hp": "",
+   "atk": "",
+   "skill": "",
+   "yukari": "",
+   "no": "035",
+   "skillType": []
   }
  ],
  "limit": [
