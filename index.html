@@ -50,6 +50,12 @@ dialog h3{margin:0 0 10px;font-size:1.05rem}dialog label{display:block;font-size
 dialog input,dialog select{display:block;width:100%;margin-top:2px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font:inherit;color:var(--fg);background:#fff}
 .act{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}.msg{font-size:.8rem;color:var(--sub);min-height:1.2em}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#333;color:#fff;border-radius:10px;padding:10px 16px;font-size:.85rem;z-index:30;max-width:90vw}
+.tipb{font:inherit;color:inherit;background:none;border:0;border-bottom:1px dotted var(--sub);padding:0;cursor:pointer;text-align:left}
+.tipbox{position:absolute;z-index:40;width:max-content;max-width:min(80vw,280px);background:var(--g);border-radius:12px;padding:10px 14px;box-shadow:0 4px 14px rgba(0,0,0,.3);text-align:left}
+.tipbox b{display:block;color:var(--gold);font-size:.88rem;margin-bottom:2px}.tipbox span{display:block;color:#fff;font-size:.8rem;line-height:1.6;white-space:pre-line}
+.tipbox::after{content:"";position:absolute;left:var(--ax);margin-left:-8px;border:8px solid transparent}
+.tipbox.up::after{top:100%;border-top-color:var(--g);border-bottom:0}.tipbox.below::after{bottom:100%;border-bottom-color:var(--g);border-top:0}
+.no{font-size:.72rem;color:var(--sub);font-weight:400}
 </style>
 </head>
 <body>
@@ -58,7 +64,7 @@ dialog input,dialog select{display:block;width:100%;margin-top:2px;padding:8px 1
 <nav id="nav" aria-label="ページ切り替え"></nav>
 </div>
 <main id="main"></main>
-<script type="application/json" id="store">{"sortie": [{"ch": "第1章", "name": "1-2", "lv": "", "type": "", "items": ""}, {"ch": "第1章", "name": "1-3", "lv": "", "type": "", "items": ""}], "gifts": {"drops": [{"name": "水", "where": "", "related": "", "men": "", "yukari": ""}], "crafts": [{"name": "臼と杵", "mats": "", "men": ""}]}, "yukari": [{"name": "天下五剣", "men": "", "mats": ""}], "men": [{"name": "三日月宗近", "ver": "レア", "look": "戦装束", "sword": "太刀", "color": "", "need": "", "skill": "", "skillType": ""}, {"name": "三日月宗近", "ver": "通常", "look": "イベント", "sword": "太刀", "color": "", "need": "", "skill": "", "skillType": ""}], "limit": [{"name": "三日月宗近", "rare": "", "lv30": "", "lv35": "", "where": ""}], "ema": [{"name": "星明かりの花", "rare": "", "effect": ""}], "chapters": ["第1章", "第2章", "第3章"], "adminHash": ""}</script>
+<script type="application/json" id="store">{"sortie": [{"ch": "第1章", "name": "1-2", "lv": "", "type": "", "items": ""}, {"ch": "第1章", "name": "1-3", "lv": "", "type": "", "items": ""}], "gifts": {"drops": [{"name": "水", "where": "", "related": "", "men": "", "yukari": ""}], "crafts": [{"name": "臼と杵", "mats": "", "men": ""}]}, "yukari": [{"name": "天下五剣", "men": "", "mats": ""}], "men": [{"name": "三日月宗近", "ver": "レア", "look": "戦装束", "sword": "太刀", "color": "", "need": "", "skill": "", "skillType": "", "no": "001"}, {"name": "三日月宗近", "ver": "通常", "look": "イベント", "sword": "太刀", "color": "", "need": "", "skill": "", "skillType": "", "no": "002"}], "limit": [{"name": "三日月宗近", "lv30": "", "lv35": "", "no": "001"}], "ema": [{"name": "星明かりの花", "rare": "", "effect": ""}], "chapters": ["第1章", "第2章", "第3章"], "adminHash": ""}</script>
 <script>
 const $=(s,r=document)=>r.querySelector(s);
 let DATA=JSON.parse($("#store").textContent);
@@ -69,21 +75,33 @@ const SWORDS=["短刀","脇差","打刀","太刀","大太刀","槍","薙刀"],CO
 const PAGES=[["sortie","出陣先"],["gifts","贈物"],["ema","絵馬"],["men","刀剣男士"],["limit","上限解放"],["yukari","ゆかり"]];
 const BCLS={"レア":"rare","通常":"normal","戦装束":"battle","イベント":"event"};
 const FW=s=>String(s).replace(/[0-9]/g,d=>String.fromCharCode(d.charCodeAt(0)+65248));
-const OPT={ver:VERS,look:LOOKS,sword:SWORDS,color:COLORS,skillType:SKILLS,get chapters(){return DATA.chapters}};
+const OPT={ver:VERS,look:LOOKS,sword:SWORDS,color:COLORS,skillType:SKILLS,get chapters(){return DATA.chapters},get menno(){return DATA.men.filter(m=>m.no).map(m=>[m.no,`${m.no} ${m.name}${m.ver?"（"+m.ver+(m.look?"・"+m.look:"")+"）":""}`])}};
 const SCH={
 sortie:{t:"ステージ",a:()=>DATA.sortie,f:[["ch","章","chapters"],["name","ステージ名"],["lv","推奨Lv"],["type","有利刀種"],["items","アイテム"]]},
 drops:{t:"ドロップ素材",a:()=>DATA.gifts.drops,f:[["name","名前"],["where","入手場所"],["related","関連贈物"],["men","必要男士"],["yukari","ゆかり"]]},
 crafts:{t:"合成アイテム",a:()=>DATA.gifts.crafts,f:[["name","名前"],["mats","必要素材"],["men","必要男士"]]},
 yukari:{t:"ゆかり",a:()=>DATA.yukari,f:[["name","名前"],["men","対象男士"],["mats","関連素材"]]},
-men:{t:"刀剣男士",a:()=>DATA.men,f:[["name","名前"],["ver","レア度","ver"],["look","姿","look"],["sword","刀種","sword"],["color","奥義色","color"],["need","発動必要数"],["skill","能力"],["skillType","能力種別","skillType"]]},
-limit:{t:"上限解放",a:()=>DATA.limit,f:[["name","名前"],["lv30","Lv20→30 必要贈物"],["lv35","Lv30→35 必要贈物"],["where","入手場所"]]},
+men:{t:"刀剣男士",a:()=>DATA.men,f:[["name","名前"],["ver","レア度","ver"],["look","姿","look"],["sword","刀種","sword"],["color","奥義色","color"],["need","発動必要数"],["skill","能力"],["skillType","能力種別","skillType"],["no","通し番号（非公開・管理者用）"]]},
+limit:{t:"上限解放",a:()=>DATA.limit,f:[["no","刀剣男士","menno"],["lv20","Lv10→Lv20"],["lv30","Lv20→Lv30"],["lv35","Lv30→Lv35"]]},
 ema:{t:"絵馬",a:()=>DATA.ema,f:[["name","名前"],["rare","レア度"],["effect","効果"]]}};
 let ADMIN=false,chipFn=null;try{ADMIN=sessionStorage.getItem("adm")==="1"}catch(e){}
-const searchable=o=>Object.values(o).join(" ").toLowerCase();
+const linkedMan=o=>o.no&&DATA.men.find(m=>m.no===o.no);
+const nextNo=()=>String(Math.max(0,...DATA.men.map(m=>parseInt(m.no)||0))+1).padStart(3,"0");
+function fixNos(){DATA.men.forEach(m=>{if(!m.no)m.no=nextNo()});DATA.limit.forEach(o=>{if(!o.no){const c=DATA.men.filter(m=>m.name===o.name);if(c.length===1)o.no=c[0].no}})}
+const searchable=o=>{const m=linkedMan(o)||{};return Object.entries({...o,n:m.name,v:m.ver,l:m.look}).filter(([k])=>k!=="no").map(e=>e[1]||"").join(" ").toLowerCase()};
 const sbox=(id,l)=>`<div class="sbox"><img src="${SICON}" alt=""><input class="search" id="${id}" type="search" placeholder="検索" aria-label="${l}"></div>`;
 const h1=t=>`<h1><img class="ico" src="${ICON}" alt="">${t}</h1>`;
+const tipb=(n,t)=>`<button type="button" class="tipb" data-tip="${esc(n)}">${esc(t||n)}</button>`;
+const findItem=n=>DATA.gifts.drops.find(o=>o.name===n)||DATA.gifts.crafts.find(o=>o.name===n);
+const it=v=>v?String(v).split(/([＋+、,，\n])/).map(p=>{if(/^[＋+、,，\n]$/.test(p))return esc(p);const n=p.trim().replace(/\s*[×xX＊*]\s*\d+$/,"");return n&&findItem(n)?tipb(n,p.trim()):esc(p)}).join(""):"";
+let tipEl=null,tipFor=null;
+function hideTip(){if(tipEl)tipEl.remove();tipEl=tipFor=null}
+function showTip(b){if(tipFor===b)return hideTip();hideTip();const n=b.dataset.tip,d=DATA.gifts.drops.find(o=>o.name===n),c=d?null:DATA.gifts.crafts.find(o=>o.name===n);
+const body=d?d.where:c&&c.mats,t=document.createElement("div");t.className="tipbox";t.innerHTML=`<b>${d?"入手場所":"必要素材"}</b><span>${body?esc(body):"未入力"}</span>`;document.body.appendChild(t);
+const r=b.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight,cx=r.left+scrollX+r.width/2,left=Math.min(Math.max(cx-w/2,scrollX+8),scrollX+innerWidth-w-8),up=r.top>h+170;
+t.classList.add(up?"up":"below");t.style.left=left+"px";t.style.top=(up?r.top+scrollY-h-10:r.bottom+scrollY+10)+"px";t.style.setProperty("--ax",Math.min(Math.max(cx-left,18),w-18)+"px");tipEl=t;tipFor=b}
 const addb=(c,l)=>ADMIN?`<button class="add" data-add="${c}">＋ ${l||SCH[c].t+"を追加"}</button>`:"";
-const card=(title,badge,rows,c,o)=>`<div class="card"><h4>${esc(title)}${[].concat(badge||[]).filter(Boolean).map(b=>`<span class="badge ${BCLS[b]||""}">${esc(b)}</span>`).join("")}${ADMIN&&c?`<button class="edit" data-edit="${c}:${SCH[c].a().indexOf(o)}">編集</button>`:""}</h4><dl>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${val(v)}</dd>`).join("")}</dl></div>`;
+const card=(title,badge,rows,c,o)=>`<div class="card"><h4>${esc(title)}${[].concat(badge||[]).filter(Boolean).map(b=>`<span class="badge ${BCLS[b]||""}">${esc(b)}</span>`).join("")}${ADMIN&&o&&o.no&&(c==="men"||c==="limit")?`<span class="no">No.${esc(o.no)}</span>`:""}${ADMIN&&c?`<button class="edit" data-edit="${c}:${SCH[c].a().indexOf(o)}">編集</button>`:""}</h4><dl>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd>`).join("")}</dl></div>`;
 function listSearch(qid,lid,c,fn,empty){const run=()=>{const q=$(qid).value.trim().toLowerCase(),hit=SCH[c].a().filter(o=>!q||searchable(o).includes(q));$(lid).innerHTML=hit.length?hit.map(fn).join(""):`<p class="empty">${empty}</p>`};$(qid).addEventListener("input",run);run()}
 function searchPage(root,title,c,fn,ph,empty){root.innerHTML=`${h1(title)}${addb(c)}${sbox("q",ph)}<div id="l"></div>`;listSearch("#q","#l",c,fn,empty)}
 const views={
@@ -97,9 +115,9 @@ const g=(k,l,a)=>`<div class="fgroup"><b>${l}</b><div class="chips">${a.map(o=>`
 root.innerHTML=`${h1("刀剣男士")}${addb("men")}<div class="filters">${g("sword","刀種",SWORDS)}${g("color","奥義色",COLORS)}${g("skillType","能力種",SKILLS)}${g("ver","レア度",VERS)}${g("look","姿",LOOKS)}</div><p class="count" id="cnt"></p><div id="list"></div>`;
 const run=()=>{const hit=DATA.men.filter(m=>Object.keys(sel).every(k=>!sel[k].size||sel[k].has(m[k])));$("#cnt").textContent=`${hit.length}件`;$("#list").innerHTML=hit.length?hit.map(m=>card(m.name,[m.ver,m.look],[["刀種",m.sword],["奥義色",m.color],["発動必要数",m.need],["能力",m.skill],["能力種別",m.skillType]],"men",m)).join(""):'<p class="empty">条件に合う刀剣男士がいません。絞り込みを解除してください。</p>'};
 chipFn=b=>{const s=sel[b.dataset.k],v=b.dataset.v;s.has(v)?s.delete(v):s.add(v);b.setAttribute("aria-pressed",s.has(v));run()};run()},
-limit(root){searchPage(root,"上限解放","limit",o=>card(o.name,o.rare,[["Lv20→30 必要贈物",o.lv30],["Lv30→35 必要贈物",o.lv35],["入手場所",o.where]],"limit",o),"検索","該当する刀剣男士がいません。")},
+limit(root){searchPage(root,"上限解放","limit",o=>{const m=linkedMan(o);return card(m?m.name:o.name||"（未設定）",m?[m.ver,m.look]:[],[["Lv10→Lv20",{h:it(o.lv20)}],["Lv20→Lv30",{h:it(o.lv30)}],["Lv30→Lv35",{h:it(o.lv35)}]],"limit",o)},"検索","該当する刀剣男士がいません。")},
 ema(root){searchPage(root,"絵馬","ema",o=>card(o.name,"",[["レア度",o.rare],["効果",o.effect]],"ema",o),"検索","該当する絵馬がありません。")}};
-function route(){const id=PAGES.some(p=>p[0]===location.hash.slice(1))?location.hash.slice(1):"sortie",root=$("#main");chipFn=null;
+function route(){const id=PAGES.some(p=>p[0]===location.hash.slice(1))?location.hash.slice(1):"sortie",root=$("#main");chipFn=null;hideTip();
 $("#nav").innerHTML=PAGES.map(([i,l])=>`<a href="#${i}"${i===id?' aria-current="page"':""}>${l}</a>`).join("");
 const o=views[id](root);if(typeof o==="string")root.innerHTML=o;
 if(ADMIN)root.insertAdjacentHTML("afterbegin",'<div class="bar"><span>管理モード</span><span><button class="add" data-gh="1" style="margin:0 6px 0 0">GitHub設定</button><button class="add" data-out="1" style="margin:0">ログアウト</button></span></div>')}
@@ -118,7 +136,7 @@ const body={message:"データ更新",content:btoa(bin),branch:c.branch};if(sha)
 const p=await fetch(ghApi(c),{method:"PUT",headers:{...ghHead(c),"Content-Type":"application/json"},body:JSON.stringify(body)});
 if(p.status===409&&!retry)return ghSave(c,true);
 if(!p.ok)throw new Error(p.status===401||p.status===403?"トークンの権限（Contents: Read and write）を確認してください":p.status===409?"競合が解消できませんでした。再読み込みしてやり直してください":"エラー "+p.status)}
-async function ghLoad(){const c=GH();if(!c||!ADMIN)return;try{const r=await ghGet(c,true);if(r.ok){const d=await r.json();if(d&&d.sortie){DATA=d;route()}}}catch(e){}}
+async function ghLoad(){const c=GH();if(!c||!ADMIN)return;try{const r=await ghGet(c,true);if(r.ok){const d=await r.json();if(d&&d.sortie){DATA=d;fixNos();route()}}}catch(e){}}
 async function commit(){route();const c=GH();
 if(c){try{await ghSave(c);toast("保存しました（サイトへの反映に1〜2分かかることがあります）")}catch(e){toast("保存に失敗："+e.message)}return}
 const a=window.claude?await claude.use("artifact"):null;
@@ -131,13 +149,15 @@ const o={};d.querySelectorAll("[data-k]").forEach(e=>o[e.dataset.k]=e.value.trim
 if(!/^[\w.-]+\/[\w.-]+$/.test(o.repo)||!o.token||!o.branch||!o.path){$("#msg").textContent="入力内容を確認してください。";return}
 try{localStorage.setItem("gh",JSON.stringify(o))}catch(e){$("#msg").textContent="この環境では設定を保存できません。";return}
 d.close();if(retry)commit()})}
-function form(c,i){const S=SCH[c],it=i>=0?S.a()[i]:{};let armed=false;
-const fs=S.f.map(([k,l,o])=>`<label>${l}${o?`<select data-k="${k}"><option value="">未選択</option>${OPT[o].map(v=>`<option${it[k]===v?" selected":""}>${esc(v)}</option>`).join("")}</select>`:`<input data-k="${k}" value="${esc(it[k]||"")}">`}</label>`).join("");
+function form(c,i){const S=SCH[c],it=i>=0?S.a()[i]:{};if(i<0&&c==="men")it.no=nextNo();let armed=false;
+const fs=S.f.map(([k,l,o])=>`<label>${l}${o?`<select data-k="${k}"><option value="">未選択</option>${OPT[o].map(v=>{const[a,l]=Array.isArray(v)?v:[v,v];return`<option value="${esc(a)}"${it[k]===a?" selected":""}>${esc(l)}</option>`}).join("")}</select>`:`<input data-k="${k}" value="${esc(it[k]||"")}">`}</label>`).join("");
 modal(`<h3>${S.t}を${i>=0?"編集":"追加"}</h3>${fs}<p class="msg" id="msg"></p><div class="act">${i>=0?'<button class="danger" data-act="del">削除</button>':""}<button data-act="cancel">キャンセル</button><button class="primary" data-act="ok">保存</button></div>`,(a,d)=>{
 if(a==="cancel")return d.close();
 if(a==="del"){if(!armed){armed=true;$("#msg").textContent="もう一度「削除」を押すと確定します。";return}S.a().splice(i,1);d.close();return commit()}
 const o={};d.querySelectorAll("[data-k]").forEach(e=>o[e.dataset.k]=e.value.trim());
-if(!o[S.f[0][0]]&&c!=="sortie"||c==="sortie"&&!o.name){$("#msg").textContent="名前を入力してください。";return}
+if(c==="men"&&/^\d+$/.test(o.no))o.no=o.no.padStart(3,"0");
+if(!o[c==="limit"?"no":"name"]){$("#msg").textContent=c==="limit"?"刀剣男士を選んでください。":"名前を入力してください。";return}
+if(c==="men"&&(!o.no||DATA.men.some((m,x)=>m.no===o.no&&x!==i))){$("#msg").textContent="通し番号が未入力か、他の男士と重複しています。";return}
 i>=0?Object.assign(S.a()[i],o):S.a().push(o);d.close();commit()})}
 function chapForm(){modal('<h3>章を追加</h3><label>章の名前<input id="cn" placeholder="例：第4章"></label><div class="act"><button data-act="cancel">キャンセル</button><button class="primary" data-act="ok">追加</button></div>',(a,d)=>{if(a==="cancel")return d.close();const v=$("#cn").value.trim();if(!v)return;DATA.chapters.push(v);d.close();commit()})}
 function login(){if(ADMIN)return;const first=!DATA.adminHash;
@@ -145,12 +165,12 @@ modal(`<h3>${first?"管理者番号を設定":"管理者番号"}</h3><input id="
 if(a==="cancel")return d.close();const v=$("#pw").value.trim();if(!v)return;const h=await sha(v);
 if(first){DATA.adminHash=h}else if(h!==DATA.adminHash){$("#msg").textContent="番号が違います。";return}
 ADMIN=true;try{sessionStorage.setItem("adm","1")}catch(e){}d.close();first?commit():(route(),ghLoad())})}
-document.addEventListener("click",e=>{const t=e.target,b=t.closest&&t.closest("[data-add],[data-edit],[data-chap],[data-out],[data-gh],.chip,#sakura");if(!b)return;
+document.addEventListener("click",e=>{const t=e.target,tb=t.closest&&t.closest(".tipb");if(tb){showTip(tb);return}hideTip();const b=t.closest&&t.closest("[data-add],[data-edit],[data-chap],[data-out],[data-gh],.chip,#sakura");if(!b)return;
 if(b.id==="sakura")login();else if(b.classList.contains("chip")){chipFn&&chipFn(b)}
 else if(b.dataset.add)form(b.dataset.add,-1);else if(b.dataset.edit){const[c,i]=b.dataset.edit.split(":");form(c,+i)}
 else if(b.dataset.chap)chapForm();else if(b.dataset.gh)ghForm(false);else if(b.dataset.out){ADMIN=false;try{sessionStorage.removeItem("adm")}catch(e){}route()}});
-window.addEventListener("hashchange",()=>{route();window.scrollTo(0,0)});route();
-fetch("data.json?_="+Date.now()).then(x=>x.ok?x.json():null).then(d=>{if(d&&d.sortie){DATA=d;route()}}).catch(()=>{}).then(ghLoad);
+window.addEventListener("hashchange",()=>{route();window.scrollTo(0,0)});fixNos();route();
+fetch("data.json?_="+Date.now()).then(x=>x.ok?x.json():null).then(d=>{if(d&&d.sortie){DATA=d;fixNos();route()}}).catch(()=>{}).then(ghLoad);
 </script>
 </body>
 </html>
