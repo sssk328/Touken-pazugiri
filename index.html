@@ -65,12 +65,14 @@ dialog{width:min(92vw,420px);border:0;border-radius:14px;padding:18px;color:var(
 dialog h3{margin:0 0 10px;font-size:1.05rem}dialog label{display:block;font-size:.8rem;color:var(--sub);margin-bottom:8px}
 .mchk{margin-bottom:8px}.mchk .ml{display:block;font-size:.8rem;color:var(--sub);margin-bottom:2px}.mchk .mrow{display:flex;flex-wrap:wrap;gap:2px 16px}dialog label.mc{display:flex;align-items:center;gap:6px;margin:0;padding:4px 0;font-size:.92rem;color:var(--fg)}dialog label.mc input{display:inline-block;width:1.2em;height:1.2em;margin:0;padding:0;accent-color:var(--g)}
 .mchk.mats{max-height:36vh;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:6px 10px}.mchk.mats .ml{margin-top:6px;font-weight:700}.mchk.mats .ml:first-child{margin-top:0}
+dialog .qrow{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:.92rem;color:var(--fg)}dialog .qrow span{flex:1;overflow-wrap:anywhere}dialog .qrow input{width:5em;margin:0;text-align:right}
 dialog input,dialog select{display:block;width:100%;margin-top:2px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font:inherit;color:var(--fg);background:#fff}
 .act{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}.msg{font-size:.8rem;color:var(--sub);min-height:1.2em}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#333;color:#fff;border-radius:10px;padding:10px 16px;font-size:.85rem;z-index:30;max-width:90vw}
 .tipb{font:inherit;color:inherit;background:none;border:0;border-bottom:1px dotted var(--sub);padding:0;cursor:pointer;text-align:left}
 .tipbox{position:absolute;z-index:40;width:max-content;max-width:min(80vw,280px);background:var(--g);border-radius:12px;padding:10px 14px;box-shadow:0 4px 14px rgba(0,0,0,.3);text-align:left}
 .tipbox b{display:block;color:var(--gold);font-size:.88rem;margin-bottom:2px}.tipbox span{display:block;color:#fff;font-size:.8rem;line-height:1.6;white-space:pre-line}
+.tipbox b.w{color:#fff}.tipbox span+b{margin-top:8px}
 .tipbox::after{content:"";position:absolute;left:var(--ax);margin-left:-8px;border:8px solid transparent}
 .tipbox.up::after{top:100%;border-top-color:var(--g);border-bottom:0}.tipbox.below::after{bottom:100%;border-bottom-color:var(--g);border-top:0}
 .no{font-size:.72rem;color:var(--sub);font-weight:400}
@@ -129,7 +131,7 @@ const sbox=(id,l)=>`<div class="sbox"><img src="${SICON}" alt=""><input class="s
 const h1=t=>`<h1><img class="ico" src="${ICON}" alt="">${t}</h1>`;
 const tipb=(n,t)=>`<button type="button" class="tipb" data-tip="${esc(n)}">${esc(t||n)}</button>`;
 const findItem=n=>DATA.gifts.drops.find(o=>o.name===n)||DATA.gifts.crafts.find(o=>o.name===n);
-const mlab=t=>t.q>1?t.n+"×"+t.q:t.n;
+const mlab=t=>t.n+"×"+(t.q||1);
 const matDisp=o=>parseM(o.mats).map(mlab);
 const matHtml=o=>parseM(o.mats).map(t=>findItem(t.n)?tipb(t.n,mlab(t)):esc(mlab(t))).join("／");
 const relAuto=n=>DATA.gifts.crafts.filter(x=>x.name&&x.name!==n&&parseM(x.mats).some(t=>t.n===n)).map(x=>x.name);
@@ -139,12 +141,13 @@ const it=v=>v?String(v).split(/([＋+、,，\n])/).map(p=>{if(/^[＋+、,，\n]$
 let tipEl=null,tipFor=null;
 function hideTip(){if(tipEl)tipEl.remove();tipEl=tipFor=null}
 function showTip(b){if(tipFor===b)return hideTip();hideTip();const n=b.dataset.tip,d=DATA.gifts.drops.find(o=>o.name===n),c=d?null:DATA.gifts.crafts.find(o=>o.name===n);
-const lab=d?"入手場所":c&&!c.mats&&c.acq?"入手方法":"必要素材",body=d?d.where:c&&(c.mats?matDisp(c).join("／"):c.acq),t=document.createElement("div");t.className="tipbox";t.innerHTML=`<b>${lab}</b><span>${body?esc(body):"未入力"}</span>`;document.body.appendChild(t);
+const t=document.createElement("div");t.className="tipbox";
+t.innerHTML=d?`<b>入手場所</b><span>${d.where?br(d.where):"未入力"}</span>`:(c&&(c.mats||c.acq)?(c.mats?`<b>必要素材</b><span>${esc(matDisp(c).join("／"))}</span>`:"")+(c.acq?`<b class="w">入手方法</b><span>${br(c.acq)}</span>`:""):`<b>必要素材</b><span>未入力</span>`);document.body.appendChild(t);
 const r=b.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight,cx=r.left+scrollX+r.width/2,left=Math.min(Math.max(cx-w/2,scrollX+8),scrollX+innerWidth-w-8),up=r.top>h+170;
 t.classList.add(up?"up":"below");t.style.left=left+"px";t.style.top=(up?r.top+scrollY-h-10:r.bottom+scrollY+10)+"px";t.style.setProperty("--ax",Math.min(Math.max(cx-left,18),w-18)+"px");tipEl=t;tipFor=b}
 const addb=(c,l)=>ADMIN?`<button class="add" data-add="${c}">＋ ${l||SCH[c].t+"を追加"}</button>`:"";
 const sak=m=>{const n=m.need?String(m.need).trim():"";return`<span class="sak" style="--c:${ECOL[m.color]||"#9e9e9e"}"><i></i><b${n.length>2?' class="s"':""}>${esc(n)}</b></span>`};
-const card=(title,badge,rows,c,o)=>`<div class="card${c==="men"?" mc":""}"><h4>${c==="men"&&o?sak(o):""}${esc(title)}${[].concat(badge||[]).filter(Boolean).map(b=>`<span class="badge ${b.c!==undefined?b.c:BCLS[b]||""}">${esc(b.t||b)}</span>`).join("")}${ADMIN&&o&&o.no&&(c==="men"||c==="limit")?`<span class="no">No.${esc(o.no)}</span>`:""}${ADMIN&&c?`<button class="edit" data-edit="${c}:${SCH[c].a().indexOf(o)}">編集</button>`:""}</h4>${c==="men"||c==="sortie"?`<div class="dlw"><dl class="sc dv c-${c}">${rows.map(([k,v])=>`<div class="r"><dt>${k}</dt><dd${v&&v.w?"":' class="nw"'}>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd></div>`).join("")}</dl></div>`:`<dl${["drops","crafts","yukari","limit"].includes(c)?` class="dv c-${c}"`:""}>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd>`).join("")}</dl>`}</div>`;
+const card=(title,badge,rows,c,o)=>`<div class="card${c==="men"?" mc":""}"><h4>${c==="men"&&o?sak(o):""}${esc(title)}${[].concat(badge||[]).filter(Boolean).map(b=>`<span class="badge ${b.c!==undefined?b.c:BCLS[b]||""}">${esc(b.t||b)}</span>`).join("")}${ADMIN&&o&&o.no&&(c==="men"||c==="limit")?`<span class="no">No.${esc(o.no)}</span>`:""}${ADMIN&&c?`<button class="edit" data-edit="${c}:${SCH[c].a().indexOf(o)}">編集</button>`:""}</h4>${c==="men"||c==="sortie"||c==="crafts"||(c==="limit"&&rows.length)?`<div class="dlw"><dl class="sc dv c-${c}">${rows.map(([k,v])=>`<div class="r"><dt>${k}</dt><dd${v&&v.w?"":' class="nw"'}>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd></div>`).join("")}</dl></div>`:`<dl${["drops","crafts","yukari","limit"].includes(c)?` class="dv c-${c}"`:""}>${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v&&v.h!==undefined?(v.h||'<span class="ph">未入力</span>'):val(v)}</dd>`).join("")}</dl>`}</div>`;
 function listSearch(qid,lid,c,fn,empty){const run=()=>{const q=$(qid).value.trim().toLowerCase(),hit=SCH[c].a().filter(o=>!q||searchable(o).includes(q));$(lid).innerHTML=hit.length?hit.map(fn).join(""):`<p class="empty">${empty}</p>`};$(qid).addEventListener("input",run);run()}
 function searchPage(root,title,c,fn,ph,empty){root.innerHTML=`${h1(title)}${addb(c)}${sbox("q",ph)}<div id="l"></div>`;listSearch("#q","#l",c,fn,empty)}
 const TIERS=[10,20,30],TF={10:"lv20",20:"lv30",30:"lv35"};
@@ -229,22 +232,26 @@ if(!/^[\w.-]+\/[\w.-]+$/.test(o.repo)||!o.token||!o.branch||!o.path){$("#msg").t
 try{localStorage.setItem("gh",JSON.stringify(o))}catch(e){$("#msg").textContent="この環境では設定を保存できません。";return}
 d.close();if(retry)commit()})}
 const mchk=(k,l,o,cur)=>{const sel=[].concat(cur||[]);return`<div class="mchk" data-m="${k}"><span class="ml">${l}</span><div class="mrow">${OPT[o].map(v=>`<label class="mc"><input type="checkbox" value="${esc(v)}"${sel.includes(v)?" checked":""}>${esc(v)}</label>`).join("")}</div></div>`};
+const qInit=it=>{const d=$("#dlg"),box=$("#qbox"),q={};parseM(it.mats).forEach(t=>q[t.n]=t.q);
+const sync=()=>{box.querySelectorAll("[data-q]").forEach(e=>q[e.dataset.q]=e.value);const ns=[...d.querySelectorAll('[data-m="mats"] input:checked')].map(x=>x.value);
+box.innerHTML=ns.length?ns.map(n=>`<label class="qrow"><span>${esc(n)}</span>×<input type="number" min="1" inputmode="numeric" data-q="${esc(n)}" value="${esc(q[n]||1)}"></label>`).join(""):'<span class="ph">必要素材を選ぶと個数欄が出ます</span>'};
+d.onchange=e=>{if(e.target.closest&&e.target.closest('[data-m="mats"]'))sync()};sync()};
 const matChk=it=>{const cur=parseM(it.mats).map(t=>t.n),dn=[...new Set(DATA.gifts.drops.map(o=>o.name).filter(Boolean))],on=[...new Set(DATA.gifts.crafts.filter(o=>o.tier==="乙"&&o.name&&o.name!==it.name).map(o=>o.name))],ex=cur.filter(n=>!dn.includes(n)&&!on.includes(n)),
 row=a=>a.map(v=>`<label class="mc"><input type="checkbox" value="${esc(v)}"${cur.includes(v)?" checked":""}>${esc(v)}</label>`).join(""),
 grp=(l,a)=>a.length?`<span class="ml">${l}</span><div class="mrow">${row(a)}</div>`:"";
 return`<div class="mchk mats" data-m="mats"><span class="ml" style="font-weight:400">必要素材（複数選択）</span>${grp("ドロップ素材",dn)}${grp("乙（中間素材）",on)}${grp("その他（未登録の素材名）",ex)}${dn.length||on.length||ex.length?"":'<div class="mrow"><span class="ph">選べる素材がまだありません</span></div>'}</div>`};
 function form(c,i){const S=SCH[c],it=i>=0?S.a()[i]:{};if(i<0&&c==="men")it.no=nextNo();let armed=false;
 const fs=S.f.map(([k,l,o,mu])=>mu?(o==="matsel"?matChk(it):mchk(k,l,o,it[k])):`<label>${l}${o?`<select data-k="${k}"><option value="">未選択</option>${OPT[o].map(v=>{const[a,l]=Array.isArray(v)?v:[v,v];return`<option value="${esc(a)}"${it[k]===a?" selected":""}>${esc(l)}</option>`}).join("")}</select>`:`<input data-k="${k}" value="${esc(it[k]||"")}">`}</label>`).join("");
-modal(`<h3>${S.t}を${i>=0?"編集":"追加"}</h3>${fs}<p class="msg" id="msg">改行したい所に /n と入力</p><div class="act">${i>=0?'<button class="danger" data-act="del">削除</button>':""}<button data-act="cancel">キャンセル</button><button class="primary" data-act="ok">保存</button></div>`,(a,d)=>{
+modal(`<h3>${S.t}を${i>=0?"編集":"追加"}</h3>${fs}${c==="crafts"?'<div class="mchk"><span class="ml">必要個数</span><div id="qbox"></div></div>':""}<p class="msg" id="msg">改行したい所に /n と入力</p><div class="act">${i>=0?'<button class="danger" data-act="del">削除</button>':""}<button data-act="cancel">キャンセル</button><button class="primary" data-act="ok">保存</button></div>`,(a,d)=>{
 if(a==="cancel")return d.close();
 if(a==="del"){if(!armed){armed=true;$("#msg").textContent="もう一度「削除」を押すと確定します。";return}const dn0=S.a()[i].name;S.a().splice(i,1);if(dn0&&(c==="drops"||c==="crafts"))reMat(dn0,"");d.close();return commit()}
 const o={};d.querySelectorAll("[data-k]").forEach(e=>o[e.dataset.k]=e.value.trim());
 d.querySelectorAll("[data-m]").forEach(e=>o[e.dataset.m]=[...e.querySelectorAll("input:checked")].map(x=>x.value));
-if(c==="crafts"){const qm={};if(i>=0)parseM(S.a()[i].mats).forEach(t=>qm[t.n]=t.q);o.mats=(o.mats||[]).map(n=>mlab({n,q:qm[n]||1})).join("＋");o.tier=o.tier||(o.acq?"特":"")}
+if(c==="crafts"){const qs={};d.querySelectorAll("[data-q]").forEach(e=>qs[e.dataset.q]=Math.max(1,parseInt(num(e.value))||1));o.mats=(o.mats||[]).map(n=>mlab({n,q:qs[n]||1})).join("＋");o.tier=o.tier||(o.acq?"特":"")}
 if(c==="men"&&/^\d+$/.test(o.no))o.no=o.no.padStart(3,"0");
 if(!o[c==="limit"?"no":"name"]){$("#msg").textContent=c==="limit"?"刀剣男士を選んでください。":"名前を入力してください。";return}
 if(c==="men"&&(!o.no||DATA.men.some((m,x)=>m.no===o.no&&x!==i))){$("#msg").textContent="通し番号が未入力か、他の男士と重複しています。";return}
-const oldN=i>=0?S.a()[i].name:"";i>=0?Object.assign(S.a()[i],o):S.a().push(o);if(oldN&&oldN!==o.name&&(c==="drops"||c==="crafts"))reMat(oldN,o.name);d.close();commit()})}
+const oldN=i>=0?S.a()[i].name:"";i>=0?Object.assign(S.a()[i],o):S.a().push(o);if(oldN&&oldN!==o.name&&(c==="drops"||c==="crafts"))reMat(oldN,o.name);d.close();commit()});if(c==="crafts")qInit(it)}
 function chapForm(){modal('<h3>章を追加</h3><label>章の名前<input id="cn" placeholder="例：第4章"></label><div class="act"><button data-act="cancel">キャンセル</button><button class="primary" data-act="ok">追加</button></div>',(a,d)=>{if(a==="cancel")return d.close();const v=$("#cn").value.trim();if(!v)return;DATA.chapters.push(v);d.close();commit()})}
 function login(){if(ADMIN)return;const first=!DATA.adminHash;
 modal(`<h3>${first?"管理者番号を設定":"管理者番号"}</h3><input id="pw" type="password" inputmode="numeric" autocomplete="off" aria-label="管理者番号"><p class="msg" id="msg">${first?"初回のみ：ここで入力した番号が管理者番号になります。":""}</p><div class="act"><button data-act="cancel">キャンセル</button><button class="primary" data-act="ok">OK</button></div>`,async(a,d)=>{
